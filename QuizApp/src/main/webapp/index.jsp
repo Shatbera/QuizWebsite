@@ -37,11 +37,20 @@
 <body>
 <h1>Welcome to the Index Page</h1>
 <div class="buttons">
-    <form action="pages/login.jsp" method="GET">
+    <form action="auth/login.jsp" method="GET">
         <button type="submit">Login</button>
     </form>
-    <form action="pages/register.jsp" method="GET">
+    <form action="auth/register.jsp" method="GET">
         <button type="submit">Register</button>
+    </form>
+    <form action="user/homepage.jsp" method="GET">
+        <button type="submit">homepage</button>
+    </form>
+    <form action="quiz/summarypage.jsp" method="GET">
+        <button type="submit">summarypage</button>
+    </form>
+    <form action="quiz/resultpage.jsp" method="GET">
+        <button type="submit">resultpage</button>
     </form>
 </div>
 </body>
