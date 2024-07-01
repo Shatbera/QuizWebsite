@@ -2,11 +2,12 @@ package Models;
 
 import java.util.ArrayList;
 
-public class MatchingQuestion {
+public class MatchingQuestion extends Question{
     private ArrayList<String> questions;
     private ArrayList<String> answers;
 
     public MatchingQuestion(ArrayList<String> questions, ArrayList<String> answers){
+        this.questionType = QuestionType.MATCHING;
         this.questions = questions;
         this.answers = answers;
     }
