@@ -1,7 +1,6 @@
 package Models;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class MultipleChoiceQuestion extends Question{
     private String question;

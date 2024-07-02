@@ -1,0 +1,5 @@
+DROP TABLE IF EXIST users;
+
+CREATE TABLE users(
+
+);
