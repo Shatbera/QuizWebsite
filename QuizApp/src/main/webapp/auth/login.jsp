@@ -58,7 +58,7 @@
 <body>
 <div class="login-form">
     <h2>Login</h2>
- <!--   <form action=todo add servlet -->
+    <form action="loginServlet" method="post">
         <div class="form-group">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
@@ -70,7 +70,7 @@
         <div class="form-group">
             <button type="submit">Login</button>
         </div>
- <!--   </form> -->
+    </form>
 </div>
 </body>
 </html>
