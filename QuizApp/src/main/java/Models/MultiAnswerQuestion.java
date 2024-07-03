@@ -1,3 +1,4 @@
+/*
 package Models;
 
 import java.util.ArrayList;
@@ -45,3 +46,4 @@ public class MultiAnswerQuestion extends Question{
         return maxAnswers;
     }
 }
+*/

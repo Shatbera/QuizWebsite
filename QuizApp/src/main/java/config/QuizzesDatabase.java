@@ -1,9 +1,9 @@
 package config;
 
-import Models.Answer;
-import Models.MatchingAnswer;
-import Models.Question;
-import Models.Quiz;
+import Models.quizzes.Answer;
+import Models.quizzes.MatchingAnswer;
+import Models.quizzes.Question;
+import Models.quizzes.Quiz;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -59,9 +59,30 @@ public class QuizzesDatabase {
     }
 
     private Question getQuestionObject(ResultSet rs) throws SQLException {
+        int id = rs.getInt("id");
         String questionText = rs.getString("question_text");
         String questionType = rs.getString("question_type");
-        return null;
+        return new Question(id, getQuestionType(questionType), questionText);
+    }
+
+    private Question.QuestionType getQuestionType(String type){
+        switch (type){
+            case "question_response":
+                return Question.QuestionType.QUESTION_RESPONSE;
+            case "fill_in_blank":
+                return Question.QuestionType.FILL_IN_BLANK;
+            case "multi_choice":
+                return Question.QuestionType.MULTI_CHOICE;
+            case "picture_response":
+                return Question.QuestionType.PICTURE_RESPONSE;
+            case "multi_answer":
+                return Question.QuestionType.MULTI_ANSWER;
+            case "multi_choice_multi_answer":
+                return Question.QuestionType.MULTI_CHOICE_MULTI_ANSWER;
+            case "matching":
+                return Question.QuestionType.MATCHING;
+        }
+        return Question.QuestionType.QUESTION_RESPONSE;
     }
 
     public ArrayList<Answer> getAnswers(int questionId){
@@ -69,10 +90,11 @@ public class QuizzesDatabase {
         try {
             ResultSet rs = statement.executeQuery(QueryGenerator.getAnswers(questionId));
             while(rs.next()){
+                int id = rs.getInt("id");
                 String ans = rs.getString("answer");
-                boolean isCorrect = rs.getBoolean("isCorrect");
-                int order = rs.getInt("order");
-                answers.add(new Answer(ans, isCorrect, order));
+                boolean isCorrect = rs.getBoolean("is_correct");
+                int order = rs.getInt("answer_order");
+                answers.add(new Answer(id, ans, isCorrect, order));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -85,9 +107,10 @@ public class QuizzesDatabase {
         try {
             ResultSet rs = statement.executeQuery(QueryGenerator.getMatchingAnswers(questionId));
             while(rs.next()){
+                int id = rs.getInt("id");
                 String leftMatch = rs.getString("left_match");
                 String rightMatch = rs.getString("right_match");
-                answers.add(new MatchingAnswer(leftMatch, rightMatch));
+                answers.add(new MatchingAnswer(id, leftMatch, rightMatch));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -108,5 +131,8 @@ public class QuizzesDatabase {
 
         return new Quiz(id, userId, title, description, randomize, quizDisplayType, immediateCorrection);
     }
+
+
+
 
 }

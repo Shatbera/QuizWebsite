@@ -1,3 +1,4 @@
+/*
 package Models;
 
 import java.util.ArrayList;
@@ -21,3 +22,4 @@ public class SimpleQuestion extends Question{
         return correctAnswers.contains(answer);
     }
 }
+*/

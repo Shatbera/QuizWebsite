@@ -1,7 +1,4 @@
-package Models;
-
-import java.util.ArrayList;
-
+package Models.quizzes;
 
 
 public class Quiz {

@@ -1,3 +1,4 @@
+/*
 package Models;
 
 import java.util.ArrayList;
@@ -34,3 +35,4 @@ public class MultipleChoiceQuestion extends Question{
         return true;
     }
 }
+*/
