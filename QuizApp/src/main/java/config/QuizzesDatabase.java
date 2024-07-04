@@ -1,9 +1,9 @@
 package config;
 
-import Models.quizzes.Answer;
-import Models.quizzes.MatchingAnswer;
-import Models.quizzes.Question;
-import Models.quizzes.Quiz;
+import models.quizzes.Answer;
+import models.quizzes.MatchingAnswer;
+import models.quizzes.Question;
+import models.quizzes.Quiz;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

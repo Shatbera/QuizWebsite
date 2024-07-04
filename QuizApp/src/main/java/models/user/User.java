@@ -1,4 +1,4 @@
-package Models.user;
+package models.user;
 
 import config.DatabaseConfig;
 import util.PasswordHashUtil;

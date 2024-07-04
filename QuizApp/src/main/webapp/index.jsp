@@ -43,7 +43,7 @@
     <form action="auth/register.jsp" method="GET">
         <button type="submit">Register</button>
     </form>
-    <form action="user/homepage.jsp" method="GET">
+    <form action="homepage.jsp" method="GET">
         <button type="submit">homepage</button>
     </form>
     <form action="quiz/summarypage.jsp" method="GET">

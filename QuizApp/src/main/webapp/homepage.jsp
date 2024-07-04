@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="config.QuizzesDatabase"%>
+<%@ page import="models.quizzes.Quiz"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,6 +28,24 @@
 <body>
 <h1>Welcome!</h1>
 
+<div class="section" id="all-quizzes">
+    <h2>All Quizzes</h2>
+    <%
+        QuizzesDatabase db = (QuizzesDatabase) application.getAttribute("quizzesDatabase");
+        if (db != null) {
+            for (Quiz quiz : db.getAllQuizzes()) {
+    %>
+    <div class="quiz-item">
+        <%@ include file="quiz/quizCard.jsp" %>
+    </div>
+    <%
+            }
+        } else {
+            out.println("<p>No quizzes available.</p>");
+        }
+    %>
+</div>
+
 
 <div class="section" id="popular-quizzes">
     <h2>Popular Quizzes</h2>
@@ -46,7 +66,6 @@
     <h2>Your Created Quizzes</h2>
     <!-- there must be subsections -->
 </div>
-
 
 <div class="section" id="friends-activities">
     <h2>Friends' Activities</h2>

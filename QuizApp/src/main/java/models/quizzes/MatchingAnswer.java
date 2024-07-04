@@ -1,4 +1,4 @@
-package Models.quizzes;
+package models.quizzes;
 
 public class MatchingAnswer {
     public final int id;

@@ -1,6 +1,6 @@
 package servlets;
 
-import Models.user.User;
+import models.user.User;
 import config.DatabaseConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
