@@ -19,7 +19,7 @@ public class DatabaseConfig {
     public static Connection getConnection() {
         if (connection == null) {
             try {
-                Class.forName("com.mysql.cj.jdbc.Driver"); // Ensure MySQL JDBC driver is loaded
+                Class.forName("com.mysql.cj.jdbc.Driver");
                 connection = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
             } catch (ClassNotFoundException | SQLException e) {
                 e.printStackTrace();

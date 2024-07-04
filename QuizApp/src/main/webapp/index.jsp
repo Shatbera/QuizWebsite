@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,12 +15,15 @@
             height: 100vh;
             background-color: #f0f0f0;
         }
+
         .buttons {
             margin-top: 20px;
         }
+
         .buttons a, .buttons form {
             margin: 5px;
         }
+
         .buttons button {
             padding: 10px 20px;
             background-color: #007bff;
@@ -29,6 +32,7 @@
             cursor: pointer;
             border-radius: 3px;
         }
+
         .buttons button:hover {
             background-color: #0056b3;
         }
@@ -42,15 +46,6 @@
     </form>
     <form action="auth/register.jsp" method="GET">
         <button type="submit">Register</button>
-    </form>
-    <form action="homepage.jsp" method="GET">
-        <button type="submit">homepage</button>
-    </form>
-    <form action="quiz/summarypage.jsp" method="GET">
-        <button type="submit">summarypage</button>
-    </form>
-    <form action="quiz/resultpage.jsp" method="GET">
-        <button type="submit">resultpage</button>
     </form>
 </div>
 </body>

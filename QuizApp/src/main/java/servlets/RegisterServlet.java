@@ -5,11 +5,10 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import util.PasswordHashUtil;
 
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -23,14 +22,27 @@ public class RegisterServlet extends HttpServlet {
         String username = request.getParameter("username");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
+        String repeatPassword = request.getParameter("repeatPassword");
+
+        if (!password.equals(repeatPassword)) {
+            request.setAttribute("message", "Passwords do not match!");
+            request.getRequestDispatcher("register.jsp").forward(request, response);
+            return;
+        }
 
         String hashedPassword = PasswordHashUtil.hashPassword(password);
 
         boolean userCreated = saveUser(username, email, hashedPassword);
         if (userCreated) {
-            response.sendRedirect("success.jsp");
+            // Initialize session
+            HttpSession session = request.getSession();
+            session.setAttribute("user", email);
+            session.setAttribute("username", username);
+            request.setAttribute("message", "Registration successful!");
+            request.getRequestDispatcher("homepage.jsp").forward(request, response);
         } else {
-            response.sendRedirect("error.jsp");
+            request.setAttribute("message", "Registration failed!");
+            request.getRequestDispatcher("register.jsp").forward(request, response);
         }
     }
 

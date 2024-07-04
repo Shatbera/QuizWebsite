@@ -31,10 +31,13 @@ public class LoginServlet extends HttpServlet {
 
         if (isValidUser) {
             HttpSession session = request.getSession();
-            session.setAttribute("currentUser", User.getAuthenticatedUser(username, password));
-            response.sendRedirect("welcome.jsp");
+            session.setAttribute("user", username);
+            session.setAttribute("username", username);
+            request.setAttribute("message", "Login successful!");
+            request.getRequestDispatcher("homepage.jsp").forward(request, response);
         } else {
-            response.sendRedirect("login.jsp?error=Invalid username or password");
+            request.setAttribute("message", "Invalid email or password!");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         }
     }
 
