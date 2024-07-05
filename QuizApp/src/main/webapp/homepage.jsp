@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="config.QuizzesDatabase, models.quizzes.Quiz"%>
 <%@ page import="config.QuizzesDatabase, models.quizzes.Quiz" %>
 <%@ page import="java.util.ArrayList" %>
 <!DOCTYPE html>
@@ -30,7 +29,7 @@
 <%
     String username = (String) session.getAttribute("username");
     if (username == null) {
-        response.sendRedirect("login.jsp");
+        //response.sendRedirect("login.jsp");
     }
 %>
 <h1>Welcome, <%= username %>!</h1>
@@ -41,19 +40,26 @@
         QuizzesDatabase db = (QuizzesDatabase) application.getAttribute("quizzesDatabase");
         if (db != null) {
             ArrayList<Quiz> allQuizzes = db.getAllQuizzes();
-            for (Quiz quiz :db.getAllQuizzes()) {
+            if (allQuizzes != null && !allQuizzes.isEmpty()) {
+                for (Quiz quiz : allQuizzes) {
     %>
     <div class="quiz-item">
-        <%@ include file="/quiz/quizCard.jsp" %>
+        <%@ include file="/quiz/quizDisplay.jsp" %>
     </div>
     <%
-            }
-        } else {
-            System.out.println("<p>No quizzes available.</p>");
+        }
+    } else {
+    %>
+    <p>No quizzes available.</p>
+    <%
+        }
+    } else {
+    %>
+    <p>No quizzes available.</p>
+    <%
         }
     %>
 </div>
-
 
 <div class="section" id="popular-quizzes">
     <h2>Popular Quizzes</h2>
