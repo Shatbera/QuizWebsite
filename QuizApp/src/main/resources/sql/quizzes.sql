@@ -56,7 +56,7 @@ INSERT INTO questions (quiz_id, question_type, question_text) VALUES
 (1, 'question_response', 'What is the capital of France?'),
 (1, 'multi_choice_multi_answer', 'Which of the following are fruits?'),
 (1, 'matching', 'Match the country with its capital.'),
-(1, 'picture_response', 'Identify this famous landmark.'),
+(1, 'picture_response', 'https://media.cntraveler.com/photos/58de89946c3567139f9b6cca/1:1/w_3633,h_3633,c_limit/GettyImages-468366251.jpg'),
 (1, 'multi_answer', 'Select all countries in Europe.');
 
 -- Insert answers for General Knowledge Quiz questions
@@ -74,10 +74,8 @@ INSERT INTO answers (question_id, answer, is_correct, answer_order) VALUES
 (3, 'Italy', TRUE, 3),
 (3, 'Rome', TRUE, 4),
 -- For 'Identify this famous landmark.'
-(4, 'Eiffel Tower', TRUE, 1),
-(4, 'Big Ben', FALSE, 2),
-(4, 'Statue of Liberty', FALSE, 3),
-(4, 'Taj Mahal', FALSE, 4),
+(4, 'Eiffel Tower', TRUE, 0),
+(4, 'Eiffel', TRUE, 0),
 -- For 'Select all countries in Europe.'
 (5, 'France', TRUE, 1),
 (5, 'Germany', TRUE, 2),

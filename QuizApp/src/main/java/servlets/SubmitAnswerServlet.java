@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import models.quizzes.Answer;
 import models.quizzes.Question;
 import models.quizzes.Quiz;
 
@@ -22,36 +21,62 @@ public class SubmitAnswerServlet extends HttpServlet {
         Quiz currentQuiz = (Quiz) session.getAttribute("currentQuiz");
         int id = Integer.parseInt(req.getParameter("questionId"));
         Question question = currentQuiz.getQuestion(id);
-        if(question.questionType == Question.QuestionType.MATCHING) {
-            ArrayList<String> leftMatches = new ArrayList<>();
-            ArrayList<String> rightMatches = new ArrayList<>();
-            for (int i = 0; i < question.getMatchingAnswers().size(); i++) {
-                leftMatches.add(question.getMatchingAnswers().get(i).leftMatch);
-                rightMatches.add(req.getParameter("rightMatch" + i));
-            }
-            question.submitMatches(leftMatches, rightMatches);
-        }else if(question.questionType == Question.QuestionType.MULTI_ANSWER){
-            int numberOfAnswers = question.getAnswers().size();
-            ArrayList<String> selectedAnswers = new ArrayList<String>();
-            for(int i = 0; i < numberOfAnswers; i++){
-                String selectedAnswer = req.getParameter("answer" + i);
-                selectedAnswers.add(selectedAnswer);
-            }
-            question.submitMultipleAnswers(selectedAnswers);
-        }else if (question.questionType == Question.QuestionType.MULTI_CHOICE_MULTI_ANSWER) {
-            String[] selectedAnswers = req.getParameterValues("selectedAnswers");
-            if (selectedAnswers != null) {
-                ArrayList<String> selectedAnswersList = new ArrayList<>(Arrays.asList(selectedAnswers));
-                question.submitMultipleAnswers(selectedAnswersList);
-            }
-        } else if (question.questionType == Question.QuestionType.MULTI_CHOICE) {
-            String selectedAnswer = req.getParameter("selectedAnswer");
-            question.submitAnswer(selectedAnswer);
-        }
-        else{
-            question.submitAnswer(req.getParameter("answer"));
-        }
 
-        System.out.printf(""+question.getScore());
+        handleSingleAnswerQuestion(req, resp, question);
+        handleMultiAnswerQuestion(req, resp, question);
+        handleMatchingQuestion(req, resp, question);
+        handleMultiChoiceQuestion(req, resp, question);
+        handleMultiChoiceMultiAnswerQuestion(req, resp, question);
+
+        System.out.println("submitted: "+question.questionText);
+    }
+
+    private void handleSingleAnswerQuestion(HttpServletRequest req, HttpServletResponse resp, Question question) throws ServletException, IOException {
+        if(question.questionType != Question.QuestionType.QUESTION_RESPONSE &&
+                question.questionType != Question.QuestionType.FILL_IN_BLANK &&
+                question.questionType != Question.QuestionType.PICTURE_RESPONSE)
+            return;
+        question.submitAnswer(req.getParameter("answer"));
+    }
+
+    private void handleMultiAnswerQuestion(HttpServletRequest req, HttpServletResponse resp, Question question) throws ServletException, IOException {
+        if(question.questionType != Question.QuestionType.MATCHING)
+            return;
+        ArrayList<String> leftMatches = new ArrayList<>();
+        ArrayList<String> rightMatches = new ArrayList<>();
+        for (int i = 0; i < question.getMatchingAnswers().size(); i++) {
+            leftMatches.add(question.getMatchingAnswers().get(i).leftMatch);
+            rightMatches.add(req.getParameter("rightMatch" + i));
+        }
+        question.submitMatches(leftMatches, rightMatches);
+    }
+
+    private void handleMatchingQuestion(HttpServletRequest req, HttpServletResponse resp, Question question) throws ServletException, IOException {
+        if(question.questionType != Question.QuestionType.MULTI_ANSWER)
+            return;
+        int numberOfAnswers = question.getAnswers().size();
+        ArrayList<String> selectedAnswers = new ArrayList<String>();
+        for(int i = 0; i < numberOfAnswers; i++){
+            String selectedAnswer = req.getParameter("answer" + i);
+            selectedAnswers.add(selectedAnswer);
+        }
+        question.submitMultipleAnswers(selectedAnswers);
+    }
+
+    private void handleMultiChoiceQuestion(HttpServletRequest req, HttpServletResponse resp, Question question) throws ServletException, IOException {
+        if(question.questionType != Question.QuestionType.MULTI_CHOICE)
+            return;
+        String selectedAnswer = req.getParameter("selectedAnswer");
+        question.submitAnswer(selectedAnswer);
+    }
+
+    private void handleMultiChoiceMultiAnswerQuestion(HttpServletRequest req, HttpServletResponse resp, Question question) throws ServletException, IOException {
+        if(question.questionType != Question.QuestionType.MULTI_CHOICE_MULTI_ANSWER)
+            return;
+        String[] selectedAnswers = req.getParameterValues("selectedAnswers");
+        if (selectedAnswers != null) {
+            ArrayList<String> selectedAnswersList = new ArrayList<>(Arrays.asList(selectedAnswers));
+            question.submitMultipleAnswers(selectedAnswersList);
+        }
     }
 }
