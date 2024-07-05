@@ -36,6 +36,10 @@ public class QueryGenerator {
                 quoted("%".concat(prompt).concat("%")), quoted(currentUser));
     }
 
+    public static String getUserProfile(String username, int currentUserId) {
+        return String.format("select u.id as id, u.username as username, u.email as email, f.friendship_type as friendship_type from users u left join friends f on ((u.id = f.receiver_id and f.sender_id = %s) or (u.id = f.sender_id and f.receiver_id = %s)) where u.username = %s",
+                currentUserId, currentUserId, quoted(username));
+    }
     private static String quoted(String str) {
         return String.format("\"%s\"", str);
     }

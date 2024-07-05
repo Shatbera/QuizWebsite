@@ -1,14 +1,17 @@
 package config;
 
 import com.mysql.cj.util.StringUtils;
+import models.enums.FriendRequestType;
 import models.quizzes.Answer;
 import models.quizzes.MatchingAnswer;
 import models.quizzes.Question;
 import models.quizzes.Quiz;
 import models.user.User;
+import models.user.UserProfile;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class DatabaseManager {
 
@@ -143,13 +146,14 @@ public class DatabaseManager {
         return new Quiz(id, userId, title, description, randomize, quizDisplayType, immediateCorrection);
     }
 
-    public boolean checkUserCredentials(String username, String hashedPassword) {
+    public Optional<Integer> checkUserCredentials(String username, String hashedPassword) {
         try {
             ResultSet resultSet = statement.executeQuery(QueryGenerator.isValidUser(username, hashedPassword));
-            return resultSet.next();
+            return Optional.ofNullable(resultSet.next() ? resultSet.getInt("id") : null);
+
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
     }
 
@@ -178,5 +182,29 @@ public class DatabaseManager {
             throw new RuntimeException(e);
         }
         return users;
+    }
+
+    public UserProfile getUserProfile(String username, int currentUserId) {
+        try {
+            ResultSet resultSet = statement.executeQuery(QueryGenerator.getUserProfile(username, currentUserId));
+            if (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String username1 = resultSet.getString("username");
+                String email = resultSet.getString("email");
+                String friendshipType = resultSet.getString("friendship_type");
+                boolean isFriend = false;
+                FriendRequestType friendRequestType = null;
+
+                if (friendshipType != null) {
+                    isFriend = friendshipType.equals("ACCEPTED");
+                    friendRequestType = FriendRequestType.valueOf(friendshipType);
+                }
+
+                return new UserProfile(id, username1, email, isFriend, friendRequestType);
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

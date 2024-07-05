@@ -26,12 +26,6 @@
             padding: 20px;
         }
 
-        .user-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
         .user-item {
             display: block;
             background-color: #f5f5f5;
