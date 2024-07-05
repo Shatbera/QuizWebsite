@@ -1,5 +1,6 @@
 package servlets;
 
+import config.DatabaseManager;
 import models.user.User;
 import config.DatabaseConfig;
 import jakarta.servlet.ServletException;
@@ -28,7 +29,8 @@ public class LoginServlet extends HttpServlet {
 
         String hashedPassword = PasswordHashUtil.hashPassword(password);
 
-        boolean isValidUser = checkUserCredentials(username, hashedPassword);
+        DatabaseManager db = (DatabaseManager) getServletContext().getAttribute(DatabaseManager.NAME);
+        boolean isValidUser = db.checkUserCredentials(username, hashedPassword);
 
         if (isValidUser) {
             HttpSession session = request.getSession();
@@ -42,7 +44,7 @@ public class LoginServlet extends HttpServlet {
         }
     }
 
-    private boolean checkUserCredentials(String username, String hashedPassword) {
+   /* private boolean checkUserCredentials(String username, String hashedPassword) {
         String sql = "select * from users where username = ? and password_hashed = ?";
 
         try (Connection connection = DatabaseConfig.getConnection();
@@ -57,5 +59,5 @@ public class LoginServlet extends HttpServlet {
             e.printStackTrace();
             return false;
         }
-    }
+    }*/
 }

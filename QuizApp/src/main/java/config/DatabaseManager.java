@@ -5,10 +5,7 @@ import models.quizzes.MatchingAnswer;
 import models.quizzes.Question;
 import models.quizzes.Quiz;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class DatabaseManager {
@@ -144,7 +141,14 @@ public class DatabaseManager {
         return new Quiz(id, userId, title, description, randomize, quizDisplayType, immediateCorrection);
     }
 
-
-
-
+    public boolean checkUserCredentials(String username, String hashedPassword) {
+        try  {
+            String sql = String.format("select * from users where username = %s and password_hashed = %s;", username, hashedPassword);
+            ResultSet resultSet = statement.executeQuery(sql);
+            return resultSet.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
