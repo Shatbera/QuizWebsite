@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<h1>Simple Question: <%= question.questionText %></h1>
+<h1><%= question.questionText %></h1>
 
 <form class="submit-answer" action="SubmitAnswerServlet" method="post">
     <label for="answer">Answer:</label>

@@ -33,4 +33,13 @@ public class Quiz {
     public ArrayList<Question> getQuestions() {
         return questions;
     }
+
+    public Question getQuestion(int questionId){
+        for(Question question : questions){
+            if(question.id == questionId){
+                return question;
+            }
+        }
+        return null;
+    }
 }
