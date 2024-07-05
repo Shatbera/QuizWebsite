@@ -5,6 +5,7 @@ import models.quizzes.Answer;
 import models.quizzes.MatchingAnswer;
 import models.quizzes.Question;
 import models.quizzes.Quiz;
+import models.user.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -163,4 +164,19 @@ public class DatabaseManager {
         }
     }
 
+    public ArrayList<User> searchUsers(String prompt, String currentUser) {
+        ArrayList<User> users = new ArrayList<>();
+        try {
+            ResultSet resultSet = statement.executeQuery(QueryGenerator.searchUsers(prompt, currentUser));
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String username = resultSet.getString("username");
+                String email = resultSet.getString("email");
+                users.add(new User(id, username, email));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return users;
+    }
 }

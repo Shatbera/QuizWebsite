@@ -10,41 +10,36 @@ import java.util.ArrayList;
 
 public class User {
     private int id;
-    private String userName;
-    private ArrayList<String> friends;
-    private ArrayList<String> friendRequests;
-    private static Connection dbConnection = DatabaseConfig.getConnection();
-    public User(int id, String userName){
-        this.userName = userName;
+    private String username;
+    private String email;
+
+    public User(int id, String userName, String email) {
+        this.username = userName;
+        this.id = id;
+        this.email = email;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
         this.id = id;
     }
 
-    public static User getUser(int id) {
-        String query = "select u from mydatabase.user u where u.id = " + id;
-        try {
-            ResultSet resultSet = dbConnection.prepareStatement(query).executeQuery();
-            if(!resultSet.next()) {
-                return null;
-            }
-            return new User(resultSet.getInt("id"),
-                    resultSet.getString("username"));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    public String getUsername() {
+        return username;
     }
 
-    public static User getAuthenticatedUser(String username, String password) {
-        String query = "select u from mydatabase.user u where u.username = " + username
-                       + " and u.password = " + PasswordHashUtil.hashPassword(password);
-        try {
-            ResultSet resultSet = dbConnection.prepareStatement(query).executeQuery();
-            if(!resultSet.next()) {
-                return null;
-            }
-            return new User(resultSet.getInt("id"),
-                    resultSet.getString("username"));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

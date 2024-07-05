@@ -24,6 +24,10 @@
     <servlet-name>LogoutServlet</servlet-name>
     <servlet-class>servlets.LogoutServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>SearchUsersServlet</servlet-name>
+    <servlet-class>servlets.SearchUsersServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
     <servlet-name>RegisterServlet</servlet-name>
     <url-pattern>/registerServlet</url-pattern>
@@ -43,5 +47,9 @@
   <servlet-mapping>
     <servlet-name>LogoutServlet</servlet-name>
     <url-pattern>/logoutServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>SearchUsersServlet</servlet-name>
+    <url-pattern>/searchUsersServlet</url-pattern>
   </servlet-mapping>
 </web-app>

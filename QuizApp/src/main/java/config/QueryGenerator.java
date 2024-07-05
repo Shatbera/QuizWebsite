@@ -30,6 +30,12 @@ public class QueryGenerator {
                 quoted(username), quoted(email), quoted(hashedPassword));
     }
 
+    public static String searchUsers(String prompt, String currentUser) {
+        return String.format("select * from users where (lower(email) like %s or lower(username) like %s) and username <> %s",
+                quoted("%".concat(prompt).concat("%")),
+                quoted("%".concat(prompt).concat("%")), quoted(currentUser));
+    }
+
     private static String quoted(String str) {
         return String.format("\"%s\"", str);
     }

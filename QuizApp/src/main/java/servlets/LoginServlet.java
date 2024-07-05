@@ -34,7 +34,6 @@ public class LoginServlet extends HttpServlet {
 
         if (isValidUser) {
             HttpSession session = request.getSession();
-            session.setAttribute("user", username);
             session.setAttribute("username", username);
             request.setAttribute("message", "Login successful!");
             request.getRequestDispatcher("homepage.jsp").forward(request, response);
@@ -43,21 +42,4 @@ public class LoginServlet extends HttpServlet {
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
     }
-
-   /* private boolean checkUserCredentials(String username, String hashedPassword) {
-        String sql = "select * from users where username = ? and password_hashed = ?";
-
-        try (Connection connection = DatabaseConfig.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-
-            statement.setString(1, username);
-            statement.setString(2, hashedPassword);
-
-            ResultSet resultSet = statement.executeQuery();
-            return resultSet.next();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }*/
 }

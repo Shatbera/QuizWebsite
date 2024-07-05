@@ -23,6 +23,35 @@
         .list-item {
             margin: 5px 0;
         }
+
+        /* Styling for logout button */
+        .logout-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        /* Styling for search form */
+        .search-form {
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        .search-form input[type="text"],
+        .search-form input[type="submit"] {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .search-form input[type="submit"] {
+            background-color: blue;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
@@ -36,6 +65,15 @@
 <form action="logoutServlet" method="get" class="logout-button">
     <input type="submit" value="Logout">
 </form>
+
+<div class="search-form">
+    <form action="searchUsersServlet" method="post">
+        <label>
+            <input type="text" name="prompt" placeholder="Search users...">
+        </label>
+        <input type="submit" value="Search">
+    </form>
+</div>
 
 <div class="section" id="all-quizzes">
     <h2>All Quizzes</h2>
