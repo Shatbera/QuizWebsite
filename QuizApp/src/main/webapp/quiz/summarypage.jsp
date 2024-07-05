@@ -1,4 +1,4 @@
-<%@ page import="config.QuizzesDatabase" %>
+<%@ page import="config.DatabaseManager" %>
 <%@ page import="models.quizzes.Quiz" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <title>Quiz Summary Page</title>
     <%
-        QuizzesDatabase db = (QuizzesDatabase) application.getAttribute("quizzesDatabase");
+        DatabaseManager db = (DatabaseManager) application.getAttribute(DatabaseManager.NAME);
         int id = Integer.parseInt(request.getParameter("id"));
         Quiz quiz = db.getQuiz(id);
     %>

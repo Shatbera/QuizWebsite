@@ -4,19 +4,19 @@ import models.quizzes.Answer;
 import models.quizzes.MatchingAnswer;
 import models.quizzes.Question;
 import models.quizzes.Quiz;
-import config.QuizzesDatabase;
+import config.DatabaseManager;
 import junit.framework.TestCase;
 
 import java.util.ArrayList;
 
 public class QuizzesDatabaseTest extends TestCase {
 
-    private QuizzesDatabase quizzesDatabase;
+    private DatabaseManager quizzesDatabase;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        quizzesDatabase = new QuizzesDatabase();
+        quizzesDatabase = new DatabaseManager();
     }
 
     public void testAllQuizzes(){

@@ -11,13 +11,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class QuizzesDatabase {
+public class DatabaseManager {
 
+    public static final String NAME = "databaseManager";
     private static final String database = "mydatabase";
 
     private Statement statement;
 
-    public QuizzesDatabase(){
+    public DatabaseManager(){
         try {
             Connection connection = DatabaseConfig.getConnection();
             statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);

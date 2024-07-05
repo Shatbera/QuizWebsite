@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="config.QuizzesDatabase, models.quizzes.Quiz" %>
+<%@ page import="config.DatabaseManager, models.quizzes.Quiz" %>
 <%@ page import="java.util.ArrayList" %>
 <!DOCTYPE html>
 <html>
@@ -37,7 +37,7 @@
 <div class="section" id="all-quizzes">
     <h2>All Quizzes</h2>
     <%
-        QuizzesDatabase db = (QuizzesDatabase) application.getAttribute("quizzesDatabase");
+        DatabaseManager db = (DatabaseManager) application.getAttribute(DatabaseManager.NAME);
         if (db != null) {
             ArrayList<Quiz> allQuizzes = db.getAllQuizzes();
             if (allQuizzes != null && !allQuizzes.isEmpty()) {

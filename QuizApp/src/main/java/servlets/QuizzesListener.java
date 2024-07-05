@@ -1,6 +1,6 @@
 package servlets;
 
-import config.QuizzesDatabase;
+import config.DatabaseManager;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
@@ -9,6 +9,6 @@ import jakarta.servlet.annotation.WebListener;
 public class QuizzesListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent event) {
-        event.getServletContext().setAttribute("quizzesDatabase", new QuizzesDatabase());
+        event.getServletContext().setAttribute(DatabaseManager.NAME, new DatabaseManager());
     }
 }
