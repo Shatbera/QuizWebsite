@@ -5,9 +5,12 @@
     }else if(question.questionType == Question.QuestionType.PICTURE_RESPONSE){
         %><%@ include file="pictureResponseQuestion.jsp" %><%
     }
-    else if(question.questionType == Question.QuestionType.MULTI_CHOICE || question.questionType == Question.QuestionType.MULTI_CHOICE_MULTI_ANSWER ){
+    else if(question.questionType == Question.QuestionType.MULTI_CHOICE){
         %><%@ include file="multiChoiceQuestion.jsp" %><%
-    }else if(question.questionType == Question.QuestionType.MULTI_ANSWER){
+    }else if(question.questionType == Question.QuestionType.MULTI_CHOICE_MULTI_ANSWER){
+        %><%@ include file="multiChoiceMultiAnswerQuestion.jsp" %><%
+    }
+    else if(question.questionType == Question.QuestionType.MULTI_ANSWER){
         %><%@ include file="multiAnswerQuestion.jsp" %><%
     }else if(question.questionType == Question.QuestionType.MATCHING){
         %><%@ include file="matchingQuestion.jsp" %><%

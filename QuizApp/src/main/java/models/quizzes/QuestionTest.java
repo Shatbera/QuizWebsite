@@ -26,7 +26,7 @@ public class QuestionTest extends TestCase {
         ArrayList<Answer> answers = new ArrayList<>();
         answers.add(new Answer(1, "2", true, 0));
         answers.add(new Answer(2, "3", true, 0));
-        answers.add(new Answer(3, "4", false, 0));
+        answers.add(new Answer(3, "4", true, 0));
         answers.add(new Answer(4, "5", true, 0));
         question.setAnswers(answers);
 
@@ -50,7 +50,7 @@ public class QuestionTest extends TestCase {
         answers.add(new Answer(1, "Red", true, 0));
         answers.add(new Answer(2, "Green", true, 0));
         answers.add(new Answer(3, "Blue", true, 0));
-        answers.add(new Answer(4, "Black", false, 0));
+        answers.add(new Answer(4, "Black", true, 0));
         question.setAnswers(answers);
 
         ArrayList<String> selectedAnswers = new ArrayList<>();

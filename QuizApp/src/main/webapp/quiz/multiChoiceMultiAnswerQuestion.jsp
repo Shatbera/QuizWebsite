@@ -10,7 +10,7 @@
 
 <form class="submit-answer" action="SubmitAnswerServlet" method="post">
     <% for (Answer answer : question.getAnswers()) { %>
-    <input type="radio" id="<%= answer.id %>" name="selectedAnswer" value="<%= answer.toString() %>">
+    <input type="checkbox" id="<%= answer.id %>" name="selectedAnswers" value="<%= answer.toString() %>">
     <label for="<%= answer.id %>"><%= answer.toString() %></label><br>
     <% } %>
 

@@ -82,7 +82,7 @@ INSERT INTO answers (question_id, answer, is_correct, answer_order) VALUES
 (5, 'France', TRUE, 1),
 (5, 'Germany', TRUE, 2),
 (5, 'Italy', TRUE, 3),
-(5, 'Spain', FALSE, 4);
+(5, 'Spain', TRUE, 4);
 
 -- Insert questions for Math Quiz (id=2)
 INSERT INTO questions (quiz_id, question_type, question_text) VALUES
@@ -150,10 +150,21 @@ INSERT INTO answers (question_id, answer, is_correct, answer_order) VALUES
 (15, 'Insect', FALSE, 3),
 (15, 'Snake', FALSE, 4);
 
+-- Insert question 'Which of the following rivers is the longest?' for General Knowledge Quiz (id=1)
+INSERT INTO questions (quiz_id, question_type, question_text) VALUES
+(1, 'multi_choice', 'Which of the following rivers is the longest?');
+
+-- Insert answers for 'Which of the following rivers is the longest?' question
+INSERT INTO answers (question_id, answer, is_correct, answer_order) VALUES
+(16, 'Amazon', FALSE, 1),
+(16, 'Nile', TRUE, 2),
+(16, 'Yangtze', FALSE, 3),
+(16, 'Mississippi', FALSE, 4);
+
 -- Insert matches for General Knowledge Quiz
 INSERT INTO matches (question_id, left_match, right_match) VALUES
-(5, 'France', 'Paris'),
-(5, 'Germany', 'Berlin');
+(3, 'France', 'Paris'),
+(3, 'Germany', 'Berlin');
 
 -- Insert matches for Math Quiz
 INSERT INTO matches (question_id, left_match, right_match) VALUES
@@ -164,9 +175,3 @@ INSERT INTO matches (question_id, left_match, right_match) VALUES
 INSERT INTO matches (question_id, left_match, right_match) VALUES
 (15, 'Lion', 'Mammal'),
 (15, 'Fish', 'Vertebrate');
-
--- Confirming all tables have been populated correctly with the new data
-SELECT * FROM quizzes;
-SELECT * FROM questions;
-SELECT * FROM answers;
-SELECT * FROM matches;
