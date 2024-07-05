@@ -20,6 +20,10 @@
     <servlet-name>SubmitAnswerServlet</servlet-name>
     <servlet-class>servlets.SubmitAnswerServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>LogoutServlet</servlet-name>
+    <servlet-class>servlets.LogoutServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
     <servlet-name>RegisterServlet</servlet-name>
     <url-pattern>/auth/registerServlet</url-pattern>
@@ -35,5 +39,9 @@
   <servlet-mapping>
     <servlet-name>SubmitAnswerServlet</servlet-name>
     <url-pattern>/quiz/SubmitAnswerServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>LogoutServlet</servlet-name>
+    <url-pattern>/auth/logoutServlet</url-pattern>
   </servlet-mapping>
 </web-app>

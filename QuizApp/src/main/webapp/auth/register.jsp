@@ -52,12 +52,33 @@
         .form-group button:hover {
             background-color: #0056b3;
         }
+
+        .message {
+            color: red;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
     </style>
+    <script>
+        function validatePasswords() {
+            const password = document.getElementById('password').value;
+            const repeatPassword = document.getElementById('repeatPassword').value;
+            if (password !== repeatPassword) {
+                alert('Passwords do not match!');
+                return false;
+            }
+            return true;
+        }
+    </script>
 </head>
 <body>
 <div class="registration-form">
     <h2>Register</h2>
-    <form action="registerServlet" method="post">
+    <% if (request.getAttribute("message") != null) { %>
+    <div class="message"><%= request.getAttribute("message") %>
+    </div>
+    <% } %>
+    <form action="registerServlet" method="post" onsubmit="return validatePasswords()">
         <div class="form-group">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>

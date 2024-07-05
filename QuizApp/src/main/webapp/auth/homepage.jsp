@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="config.QuizzesDatabase, models.quizzes.Quiz"%>
+<%@ page import="config.QuizzesDatabase, models.quizzes.Quiz" %>
+<%@ page import="java.util.ArrayList" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,22 +27,29 @@
     </style>
 </head>
 <body>
-<h1>Welcome!</h1>
+<%
+    String username = (String) session.getAttribute("username");
+    if (username == null) {
+        response.sendRedirect("login.jsp");
+    }
+%>
+<h1>Welcome, <%= username %>!</h1>
 
 <div class="section" id="all-quizzes">
     <h2>All Quizzes</h2>
     <%
         QuizzesDatabase db = (QuizzesDatabase) application.getAttribute("quizzesDatabase");
         if (db != null) {
-            for (Quiz quiz : db.getAllQuizzes()) {
+            ArrayList<Quiz> allQuizzes = db.getAllQuizzes();
+            for (Quiz quiz :db.getAllQuizzes()) {
     %>
     <div class="quiz-item">
-        <%@ include file="quiz/quizDisplay.jsp" %>
+        <%@ include file="/quiz/quizCard.jsp" %>
     </div>
     <%
             }
         } else {
-            out.println("<p>No quizzes available.</p>");
+            System.out.println("<p>No quizzes available.</p>");
         }
     %>
 </div>
