@@ -21,13 +21,14 @@ public class SubmitAnswerServlet extends HttpServlet {
         Quiz currentQuiz = (Quiz) session.getAttribute("currentQuiz");
         int id = Integer.parseInt(req.getParameter("questionId"));
         Question question = currentQuiz.getQuestion(id);
-        
+
         handleSingleAnswerQuestion(req, resp, question);
         handleMultiAnswerQuestion(req, resp, question);
         handleMatchingQuestion(req, resp, question);
         handleMultiChoiceQuestion(req, resp, question);
         handleMultiChoiceMultiAnswerQuestion(req, resp, question);
 
+        System.out.println("submitted: "+question.questionText);
     }
 
     private void handleSingleAnswerQuestion(HttpServletRequest req, HttpServletResponse resp, Question question) throws ServletException, IOException {
