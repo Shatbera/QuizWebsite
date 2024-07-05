@@ -1,5 +1,7 @@
 package config;
 
+import models.enums.FriendRequestType;
+
 public class QueryGenerator {
     public static String getAllQuizzes() {
         return "SELECT * FROM quizzes";
@@ -37,11 +39,21 @@ public class QueryGenerator {
     }
 
     public static String getUserProfile(String username, int currentUserId) {
-        return String.format("select u.id as id, u.username as username, u.email as email, f.friendship_type as friendship_type from users u left join friends f on ((u.id = f.receiver_id and f.sender_id = %s) or (u.id = f.sender_id and f.receiver_id = %s)) where u.username = %s",
+        return String.format("select u.id as id, u.username as username, u.email as email, f.friendship_type as friendship_type, f.sender_id as sender_id, f.receiver_id as receiver_id from users u left join friends f on ((u.id = f.receiver_id and f.sender_id = %s) or (u.id = f.sender_id and f.receiver_id = %s)) where u.username = %s",
                 currentUserId, currentUserId, quoted(username));
     }
+
     private static String quoted(String str) {
         return String.format("\"%s\"", str);
     }
 
+    public static String sendFriendRequest(int fromUserId, int toUserId) {
+        return String.format("insert into friends (sender_id, receiver_id, friendship_type) values (%s, %s, %s)",
+                fromUserId, toUserId, quoted(FriendRequestType.PENDING.name()));
+    }
+
+    public static String acceptFriendRequest(int fromUserId, int toUserId) {
+        return String.format("update friends set friendship_type = 'APPROVED' where sender_id = %s and receiver_id = %s",
+                fromUserId, toUserId);
+    }
 }

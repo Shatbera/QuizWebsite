@@ -192,17 +192,37 @@ public class DatabaseManager {
                 String username1 = resultSet.getString("username");
                 String email = resultSet.getString("email");
                 String friendshipType = resultSet.getString("friendship_type");
+                Integer senderId = Optional.ofNullable(resultSet.getInt("sender_id")).orElse(null);
+                Integer receiverId = Optional.ofNullable(resultSet.getInt("receiver_id")).orElse(null);
                 boolean isFriend = false;
                 FriendRequestType friendRequestType = null;
 
                 if (friendshipType != null) {
-                    isFriend = friendshipType.equals("ACCEPTED");
+                    isFriend = friendshipType.equals("APPROVED");
                     friendRequestType = FriendRequestType.valueOf(friendshipType);
                 }
 
-                return new UserProfile(id, username1, email, isFriend, friendRequestType);
+                return new UserProfile(id, username1, email, isFriend, senderId, receiverId, friendRequestType);
             }
             return null;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean sendFriendRequest(int fromUserId, int toUserId) {
+        try {
+            int executed = statement.executeUpdate(QueryGenerator.sendFriendRequest(fromUserId, toUserId));
+            return executed > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean acceptFriendRequest(int fromUserId, int toUserId) {
+        try {
+            int executed = statement.executeUpdate(QueryGenerator.acceptFriendRequest(fromUserId, toUserId));
+            return executed > 0;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
