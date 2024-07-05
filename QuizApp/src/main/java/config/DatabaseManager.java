@@ -144,8 +144,7 @@ public class DatabaseManager {
 
     public boolean checkUserCredentials(String username, String hashedPassword) {
         try {
-            String sql = String.format("select * from users where username = %s and password_hashed = %s", quoted(username), quoted(hashedPassword));
-            ResultSet resultSet = statement.executeQuery(sql);
+            ResultSet resultSet = statement.executeQuery(QueryGenerator.isValidUser(username, hashedPassword));
             return resultSet.next();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -153,7 +152,15 @@ public class DatabaseManager {
         }
     }
 
-    private String quoted(String str) {
-        return String.format("\"%s\"", str);
+
+    public boolean saveUser(String username, String email, String hashedPassword) {
+        try {
+            int update = statement.executeUpdate(QueryGenerator.saveUser(username, email, hashedPassword));
+            return update > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
+
 }

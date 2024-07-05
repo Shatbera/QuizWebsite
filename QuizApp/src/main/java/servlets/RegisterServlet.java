@@ -1,6 +1,6 @@
 package servlets;
 
-import config.DatabaseConfig;
+import config.DatabaseManager;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,9 +9,6 @@ import jakarta.servlet.http.HttpSession;
 import util.PasswordHashUtil;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 public class RegisterServlet extends HttpServlet {
 
@@ -31,8 +28,8 @@ public class RegisterServlet extends HttpServlet {
         }
 
         String hashedPassword = PasswordHashUtil.hashPassword(password);
-
-        boolean userCreated = saveUser(username, email, hashedPassword);
+        DatabaseManager db = (DatabaseManager) getServletContext().getAttribute(DatabaseManager.NAME);
+        boolean userCreated = db.saveUser(username, email, hashedPassword);
         if (userCreated) {
             // Initialize session
             HttpSession session = request.getSession();
@@ -47,21 +44,4 @@ public class RegisterServlet extends HttpServlet {
     }
 
 
-    private boolean saveUser(String username, String email, String hashedPassword) {
-        String sql = "insert into users (username, email, password_hashed) values (?, ?, ?)";
-
-        try {
-            Connection connection = DatabaseConfig.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, username);
-            statement.setString(2, email);
-            statement.setString(3, hashedPassword);
-
-            int rowsInserted = statement.executeUpdate();
-            return rowsInserted > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
 }

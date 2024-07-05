@@ -39,7 +39,7 @@
     </style>
 </head>
 <body>
-<h1>Welcome to the Index Page</h1>
+<h1>Welcome to the Quiz Website!</h1>
 <div class="buttons">
     <form action="login.jsp" method="GET">
         <button type="submit">Login</button>

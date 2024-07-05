@@ -33,6 +33,9 @@
     }
 %>
 <h1>Welcome, <%= username %>!</h1>
+<form action="logoutServlet" method="get" class="logout-button">
+    <input type="submit" value="Logout">
+</form>
 
 <div class="section" id="all-quizzes">
     <h2>All Quizzes</h2>
