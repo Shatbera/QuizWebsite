@@ -1,10 +1,9 @@
-package tests;
+package config;
 
 import models.quizzes.Answer;
 import models.quizzes.MatchingAnswer;
 import models.quizzes.Question;
 import models.quizzes.Quiz;
-import config.DatabaseManager;
 import junit.framework.TestCase;
 
 import java.util.ArrayList;
