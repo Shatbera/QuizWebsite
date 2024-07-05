@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="config.QuizzesDatabase"%>
-<%@ page import="models.quizzes.Quiz"%>
+<%@ page import="config.QuizzesDatabase, models.quizzes.Quiz"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -36,7 +35,7 @@
             for (Quiz quiz : db.getAllQuizzes()) {
     %>
     <div class="quiz-item">
-        <%@ include file="quiz/quizCard.jsp" %>
+        <%@ include file="quiz/quizDisplay.jsp" %>
     </div>
     <%
             }

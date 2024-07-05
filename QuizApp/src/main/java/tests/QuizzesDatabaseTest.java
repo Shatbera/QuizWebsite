@@ -27,6 +27,10 @@ public class QuizzesDatabaseTest extends TestCase {
         }
     }
 
+    public void testGetQuiz(){
+        testQuiz(quizzesDatabase.getQuiz(1));
+    }
+
     private void testQuiz(Quiz quiz){
         ArrayList<Question> questions = quizzesDatabase.getQuizQuestions(quiz.id);
         for(Question question : questions){

@@ -27,6 +27,17 @@ public class QuizzesDatabase {
         }
     }
 
+    public Quiz getQuiz(int id){
+        try {
+            ResultSet rs = statement.executeQuery(QueryGenerator.getQuiz(id));
+            if(rs.next()){
+                return getQuizObject(rs);
+            }else return null;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public ArrayList<Quiz> getAllQuizzes(){
         ArrayList<Quiz> quizzes = new ArrayList<>();
         try {

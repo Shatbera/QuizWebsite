@@ -12,6 +12,14 @@
     <servlet-name>LoginServlet</servlet-name>
     <servlet-class>servlets.LoginServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>StartQuizServlet</servlet-name>
+    <servlet-class>servlets.StartQuizServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>SubmitAnswerServlet</servlet-name>
+    <servlet-class>servlets.SubmitAnswerServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
     <servlet-name>RegisterServlet</servlet-name>
     <url-pattern>/auth/registerServlet</url-pattern>
@@ -19,5 +27,13 @@
   <servlet-mapping>
     <servlet-name>LoginServlet</servlet-name>
     <url-pattern>/auth/loginServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>StartQuizServlet</servlet-name>
+    <url-pattern>/quiz/StartQuizServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>SubmitAnswerServlet</servlet-name>
+    <url-pattern>/quiz/SubmitAnswerServlet</url-pattern>
   </servlet-mapping>
 </web-app>

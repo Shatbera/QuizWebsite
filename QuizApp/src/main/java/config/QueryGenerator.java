@@ -16,4 +16,8 @@ public class QueryGenerator {
     public static String getMatchingAnswers(int questionId){
         return String.format("SELECT * FROM matches WHERE question_id = %s;", questionId);
     }
+
+    public static String getQuiz(int id) {
+        return String.format("SELECT * FROM quizzes WHERE id = %s;", id);
+    }
 }
