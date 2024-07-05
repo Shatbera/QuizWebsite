@@ -41,10 +41,10 @@
 <body>
 <h1>Welcome to the Index Page</h1>
 <div class="buttons">
-    <form action="auth/login.jsp" method="GET">
+    <form action="login.jsp" method="GET">
         <button type="submit">Login</button>
     </form>
-    <form action="auth/register.jsp" method="GET">
+    <form action="register.jsp" method="GET">
         <button type="submit">Register</button>
     </form>
     <form action="homepage.jsp" method="GET">

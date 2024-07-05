@@ -26,11 +26,11 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>RegisterServlet</servlet-name>
-    <url-pattern>/auth/registerServlet</url-pattern>
+    <url-pattern>/registerServlet</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>LoginServlet</servlet-name>
-    <url-pattern>/auth/loginServlet</url-pattern>
+    <url-pattern>/loginServlet</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>StartQuizServlet</servlet-name>
