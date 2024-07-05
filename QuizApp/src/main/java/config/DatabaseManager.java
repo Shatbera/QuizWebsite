@@ -1,5 +1,6 @@
 package config;
 
+import com.mysql.cj.util.StringUtils;
 import models.quizzes.Answer;
 import models.quizzes.MatchingAnswer;
 import models.quizzes.Question;
@@ -15,7 +16,7 @@ public class DatabaseManager {
 
     private Statement statement;
 
-    public DatabaseManager(){
+    public DatabaseManager() {
         try {
             Connection connection = DatabaseConfig.getConnection();
             statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -25,22 +26,22 @@ public class DatabaseManager {
         }
     }
 
-    public Quiz getQuiz(int id){
+    public Quiz getQuiz(int id) {
         try {
             ResultSet rs = statement.executeQuery(QueryGenerator.getQuiz(id));
-            if(rs.next()){
+            if (rs.next()) {
                 return getQuizObject(rs);
-            }else return null;
+            } else return null;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public ArrayList<Quiz> getAllQuizzes(){
+    public ArrayList<Quiz> getAllQuizzes() {
         ArrayList<Quiz> quizzes = new ArrayList<>();
         try {
             ResultSet rs = statement.executeQuery(QueryGenerator.getAllQuizzes());
-            while(rs.next()){
+            while (rs.next()) {
                 Quiz quiz = getQuizObject(rs);
                 quizzes.add(quiz);
             }
@@ -51,12 +52,12 @@ public class DatabaseManager {
     }
 
 
-    public ArrayList<Question> getQuizQuestions(int quizId){
+    public ArrayList<Question> getQuizQuestions(int quizId) {
         ArrayList<Question> questions = new ArrayList<>();
 
         try {
             ResultSet rs = statement.executeQuery(QueryGenerator.getQuizQuestions(quizId));
-            while(rs.next()){
+            while (rs.next()) {
                 Question question = getQuestionObject(rs);
                 questions.add(question);
             }
@@ -74,8 +75,8 @@ public class DatabaseManager {
         return new Question(id, getQuestionType(questionType), questionText);
     }
 
-    private Question.QuestionType getQuestionType(String type){
-        switch (type){
+    private Question.QuestionType getQuestionType(String type) {
+        switch (type) {
             case "question_response":
                 return Question.QuestionType.QUESTION_RESPONSE;
             case "fill_in_blank":
@@ -94,11 +95,11 @@ public class DatabaseManager {
         return Question.QuestionType.QUESTION_RESPONSE;
     }
 
-    public ArrayList<Answer> getAnswers(int questionId){
+    public ArrayList<Answer> getAnswers(int questionId) {
         ArrayList<Answer> answers = new ArrayList<>();
         try {
             ResultSet rs = statement.executeQuery(QueryGenerator.getAnswers(questionId));
-            while(rs.next()){
+            while (rs.next()) {
                 int id = rs.getInt("id");
                 String ans = rs.getString("answer");
                 boolean isCorrect = rs.getBoolean("is_correct");
@@ -111,11 +112,11 @@ public class DatabaseManager {
         return answers;
     }
 
-    public ArrayList<MatchingAnswer> getMatchingAnswers(int questionId){
+    public ArrayList<MatchingAnswer> getMatchingAnswers(int questionId) {
         ArrayList<MatchingAnswer> answers = new ArrayList<>();
         try {
             ResultSet rs = statement.executeQuery(QueryGenerator.getMatchingAnswers(questionId));
-            while(rs.next()){
+            while (rs.next()) {
                 int id = rs.getInt("id");
                 String leftMatch = rs.getString("left_match");
                 String rightMatch = rs.getString("right_match");
@@ -142,13 +143,17 @@ public class DatabaseManager {
     }
 
     public boolean checkUserCredentials(String username, String hashedPassword) {
-        try  {
-            String sql = String.format("select * from users where username = %s and password_hashed = %s;", username, hashedPassword);
+        try {
+            String sql = String.format("select * from users where username = %s and password_hashed = %s", quoted(username), quoted(hashedPassword));
             ResultSet resultSet = statement.executeQuery(sql);
             return resultSet.next();
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
+    }
+
+    private String quoted(String str) {
+        return String.format("\"%s\"", str);
     }
 }
