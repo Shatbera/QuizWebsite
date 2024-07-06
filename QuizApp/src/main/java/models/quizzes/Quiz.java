@@ -88,4 +88,12 @@ public class Quiz {
         int maxScore = getMaxScore();
         return (int)((float) 100 * score / maxScore);
     }
+
+    public Question getNextQuestion(){
+        for(Question question : questions){
+            if(!question.isSubmitted())
+                return question;
+        }
+        return null;
+    }
 }

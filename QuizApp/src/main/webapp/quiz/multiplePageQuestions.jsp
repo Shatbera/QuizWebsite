@@ -6,6 +6,9 @@
 <head>
     <title>Title</title>
     <style>
+        body{
+            align-content: center;
+        }
         .container {
             max-width: 600px; /* Adjust max-width as needed */
             margin: 0 auto;
@@ -40,8 +43,12 @@
     <form id="quizForm" class="quiz-form" action="SubmitAnswerServlet" method="post">
         <%
             Quiz quiz = (Quiz) session.getAttribute("currentQuiz");
-            ArrayList<Question> questions = quiz.getQuestions();
-            for (Question question : questions) {
+            Question question = quiz.getNextQuestion();
+            if(question == null) {
+                quiz.endQuiz();
+                response.sendRedirect("resultpage.jsp");
+            }else{
+
         %>
         <div class="question-item">
             <%@ include file="question.jsp" %>
@@ -50,7 +57,7 @@
         <%
             }
         %>
-        <input type="submit" class="submit-button" value="Submit All Answers">
+        <input type="submit" class="submit-button" value="<%=quiz.immediateCorrection ? "Check Answer" : "Next"%>">
     </form>
 </div>
 </body>

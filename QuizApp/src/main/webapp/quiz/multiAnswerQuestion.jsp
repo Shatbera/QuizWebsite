@@ -2,9 +2,9 @@
 <h1><%= question.questionText %></h1>
 
 <%
-    ArrayList<Answer> answers = question.getAnswers();
+    ArrayList<String> answers = question.getCorrectAnswers();
     for (int i = 0; i < answers.size(); i++) {
-        Answer answer = answers.get(i);
+        //Answer answer = answers.get(i);
 %>
 <div class="answer-container">
     <span class="answer-number"><%= i + 1 %></span>
