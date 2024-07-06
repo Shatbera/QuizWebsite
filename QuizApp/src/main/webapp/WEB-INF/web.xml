@@ -54,11 +54,11 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
-        <url-pattern>/registerServlet</url-pattern>
+        <url-pattern>/user/registerServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
-        <url-pattern>/loginServlet</url-pattern>
+        <url-pattern>/user/loginServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>StartQuizServlet</servlet-name>
@@ -70,34 +70,34 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LogoutServlet</servlet-name>
-        <url-pattern>/logoutServlet</url-pattern>
+        <url-pattern>/user/logoutServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>SendFriendRequestServlet</servlet-name>
-        <url-pattern>/sendFriendRequest</url-pattern>
+        <url-pattern>/user/sendFriendRequest</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>SearchUsersServlet</servlet-name>
-        <url-pattern>/searchUsersServlet</url-pattern>
+        <url-pattern>/user/searchUsersServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>UserProfileServlet</servlet-name>
-        <url-pattern>/userProfile</url-pattern>
+        <url-pattern>/user/userProfile</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AcceptFriendRequestServlet</servlet-name>
-        <url-pattern>/acceptFriendRequest</url-pattern>
+        <url-pattern>/user/acceptFriendRequest</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>CancelFriendRequestServlet</servlet-name>
-        <url-pattern>/cancelFriendRequest</url-pattern>
+        <url-pattern>/user/cancelFriendRequest</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>DeclineFriendRequestServlet</servlet-name>
-        <url-pattern>/declineFriendRequest</url-pattern>
+        <url-pattern>/user/declineFriendRequest</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>SendMessageServlet</servlet-name>
-        <url-pattern>/sendMessage</url-pattern>
+        <url-pattern>/user/sendMessage</url-pattern>
     </servlet-mapping>
 </web-app>

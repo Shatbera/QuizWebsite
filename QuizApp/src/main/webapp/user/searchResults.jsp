@@ -68,7 +68,7 @@
 %>
 <h1>Welcome, <%= currentUsername %>!</h1>
 
-<form action="logout" method="get" class="logout-button">
+<form action="logoutServlet" method="get" class="logout-button">
     <input type="submit" value="Logout">
 </form>
 

@@ -45,7 +45,7 @@
 <div class="quiz-box">
 	<h1><%= quiz.title %></h1>
 	<p><%= quiz.description %></p>
-	<a href="quiz/summarypage.jsp?id=<%= quiz.id %>" class="details-btn">Details</a>
+	<a href="../quiz/summarypage.jsp?id=<%= quiz.id %>" class="details-btn">Details</a>
 </div>
 </body>
 </html>

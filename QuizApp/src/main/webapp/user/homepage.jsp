@@ -219,7 +219,7 @@
                 for (Quiz quiz : allQuizzes) {
     %>
     <div class="quiz-item">
-        <%@ include file="/quiz/quizDisplay.jsp" %>
+        <%@ include file="../quiz/quizDisplay.jsp" %>
     </div>
     <%
         }
@@ -238,7 +238,28 @@
 
 <div class="section" id="popular-quizzes">
     <h2>Popular Quizzes</h2>
-    <!-- there must be subsections -->
+    <%
+        if (db != null) {
+            List<Quiz> popularQuizzes = db.getTopTwoPopularQuizzes();
+            if (popularQuizzes != null && !popularQuizzes.isEmpty()) {
+                for (Quiz quiz : popularQuizzes) {
+    %>
+    <div class="quiz-item">
+        <%@ include file="/quiz/quizDisplay.jsp" %>
+    </div>
+    <%
+        }
+    } else {
+    %>
+    <p>No quizzes created.</p>
+    <%
+        }
+    } else {
+    %>
+    <p>No quizzes created.</p>
+    <%
+        }
+    %>
 </div>
 
 <div class="section" id="recent-quizzes">

@@ -87,11 +87,20 @@ public class QueryGenerator {
 
     public static String saveQuizAttempt(int userId, int id, int score, int timeTaken) {
         return String.format("insert into quiz_attempts (quiz_id, user_id, score, time_taken) values (%s, %s, %s, %s)",
-                userId, id, score, timeTaken);
+                id, userId, score, timeTaken);
     }
 
     public static String fetchCreatedQuizzes(int id) {
         return String.format("select * from quizzes where user_id = %s", id);
+    }
+
+    public static String fetchTopThreePopularQuizzes() {
+        return "select q.*, count(distinct qa.user_id) as unique_users " +
+               "from quizzes q " +
+               "join quiz_attempts qa on q.id = qa.quiz_id " +
+               "group by q.id " +
+               "order by unique_users desc " +
+               "limit 2";
     }
 
     public static String fetchPastResults(int userId, int quizId) {

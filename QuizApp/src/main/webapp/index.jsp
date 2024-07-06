@@ -41,13 +41,13 @@
 <body>
 <h1>Welcome to the Quiz Website!</h1>
 <div class="buttons">
-    <form action="login.jsp" method="GET">
+    <form action="user/login.jsp" method="GET">
         <button type="submit">Login</button>
     </form>
-    <form action="register.jsp" method="GET">
+    <form action="user/register.jsp" method="GET">
         <button type="submit">Register</button>
     </form>
-    <form action="homepage.jsp" method="GET">
+    <form action="user/homepage.jsp" method="GET">
         <button type="submit">Home</button>
     </form>
 </div>

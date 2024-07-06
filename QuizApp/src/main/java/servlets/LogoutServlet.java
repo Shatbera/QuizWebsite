@@ -18,6 +18,6 @@ public class LogoutServlet extends HttpServlet {
             session.removeAttribute("user");
             session.removeAttribute("id");
         }
-        response.sendRedirect("index.jsp");
+        response.sendRedirect("../index.jsp");
     }
 }

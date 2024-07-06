@@ -81,6 +81,7 @@
         int maxScore = quiz.getMaxScore();
         int percentage = quiz.getScorePercentage();
         int timeTaken = quiz.getQuizTimeTaken();
+        session.removeAttribute("currentQuiz");
     %>
 </head>
 <body>
@@ -161,6 +162,8 @@
     <div>
         <h2>Top Performers on This Quiz</h2>
     </div>
+
+    <a href="../user/homepage.jsp" class="button">Back to Home Page</a>
 
 </div>
 
