@@ -31,6 +31,9 @@ public class SubmitAnswerServlet extends HttpServlet {
             handleMultiChoiceQuestion(req, resp, question);
             handleMultiChoiceMultiAnswerQuestion(req, resp, question);
         }
+
+        currentQuiz.endQuiz();
+        req.getRequestDispatcher("resultpage.jsp").forward(req, resp);
     }
 
     private void handleSingleAnswerQuestion(HttpServletRequest req, HttpServletResponse resp, Question question) throws ServletException, IOException {

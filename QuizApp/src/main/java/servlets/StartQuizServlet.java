@@ -34,6 +34,7 @@ public class StartQuizServlet extends HttpServlet {
             }
         }
         quiz.setQuestions(questions);
+        quiz.startQuiz();
         HttpSession session = req.getSession();
         session.setAttribute("currentQuiz", quiz);
         req.getRequestDispatcher("singlePageQuestions.jsp").forward(req, resp);

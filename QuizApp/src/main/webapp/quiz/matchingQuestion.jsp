@@ -10,7 +10,6 @@
 <body>
 <h1><%= question.questionText %></h1>
 
-<%--<form class="submit-answer" action="SubmitAnswerServlet" method="post">--%>
     <%
         ArrayList<MatchingAnswer> matchingAnswers = question.getMatchingAnswers();
         ArrayList<String> leftMatches = new ArrayList<>();
@@ -30,8 +29,5 @@
     </select>
     <br><br>
     <% } %>
-
-    <input type="submit" value="Submit Answer">
-<%--</form>--%>
 </body>
 </html>

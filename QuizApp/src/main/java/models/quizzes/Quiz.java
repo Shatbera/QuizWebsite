@@ -1,10 +1,13 @@
 package models.quizzes;
 
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 
 public class Quiz {
     public enum DisplayType {OnePage, MultiplePage};
+
 
     public final int id;
     public final int userId;
@@ -15,6 +18,9 @@ public class Quiz {
     public boolean immediateCorrection;
 
     private ArrayList<Question> questions;
+
+    private Instant quizStartTime;
+    private int quizTimeTaken;
 
     public Quiz(int id, int userId, String title, String description, boolean randomize, DisplayType displayType, boolean immediateCorrection){
         this.id = id;
@@ -41,5 +47,39 @@ public class Quiz {
             }
         }
         return null;
+    }
+
+    public void startQuiz(){
+        quizStartTime = Instant.now();
+    }
+
+    public void endQuiz(){
+        quizTimeTaken = (int)Duration.between(quizStartTime, Instant.now()).getSeconds();
+    }
+
+    public int getQuizTimeTaken(){
+        return quizTimeTaken;
+    }
+
+    public int getScore(){
+        int score = 0;
+        for(Question question : questions){
+            score += question.getScore();
+        }
+        return score;
+    }
+
+    public int getMaxScore(){
+        int maxScore = 0;
+        for(Question question : questions){
+            maxScore += question.getMaxScore();
+        }
+        return maxScore;
+    }
+
+    public int getScorePercentage(){
+        int score = getScore();
+        int maxScore = getMaxScore();
+        return (int)((float) 100 * score / maxScore);
     }
 }
