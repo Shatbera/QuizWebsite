@@ -14,6 +14,10 @@ public class Answer {
         this.order = order;
     }
 
+    public Answer(String answer, boolean isCorrect){
+        this(-1, answer, isCorrect, 0);
+    }
+
     @Override
     public String toString() {
         return answer;

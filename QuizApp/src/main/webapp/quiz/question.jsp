@@ -1,4 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<style>
+    .question-image {
+        max-width: 200px;
+        max-height: 200px;
+        width: auto;
+        height: auto;
+    }
+</style>
 <%
     if(question.questionType == Question.QuestionType.QUESTION_RESPONSE || question.questionType == Question.QuestionType.FILL_IN_BLANK){
         %><%@ include file="simpleQuestion.jsp" %><%

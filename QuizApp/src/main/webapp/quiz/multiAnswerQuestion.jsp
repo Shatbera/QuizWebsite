@@ -1,6 +1,5 @@
 <%@ page import="models.quizzes.Answer" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<h1>Multi Answer Question: <%= question.questionText %></h1>
+<h1><%= question.questionText %></h1>
 
 <%
     ArrayList<Answer> answers = question.getAnswers();

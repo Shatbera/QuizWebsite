@@ -39,7 +39,7 @@ public class QuestionTest extends TestCase {
 
         selectedAnswers.clear();
         selectedAnswers.add("2");
-        selectedAnswers.add("4");
+        selectedAnswers.add("11");
 
         assertEquals(1, question.submitMultipleAnswers(selectedAnswers));
     }
@@ -50,7 +50,7 @@ public class QuestionTest extends TestCase {
         answers.add(new Answer(1, "Red", true, 0));
         answers.add(new Answer(2, "Green", true, 0));
         answers.add(new Answer(3, "Blue", true, 0));
-        answers.add(new Answer(4, "Black", true, 0));
+        answers.add(new Answer(4, "Black", false, 0));
         question.setAnswers(answers);
 
         ArrayList<String> selectedAnswers = new ArrayList<>();

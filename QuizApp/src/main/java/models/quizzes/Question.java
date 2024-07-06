@@ -14,6 +14,9 @@ public class Question {
     private HashMap<String, String> matchesMap;
     private ArrayList<MatchingAnswer> matchingAnswers;
 
+    private Answer submittedAnswer;
+    private ArrayList<Answer> submittedAnswers;
+
     private int score = 0;
     private int maxScore = 1;
 
@@ -29,6 +32,14 @@ public class Question {
 
     public int getMaxScore(){
         return maxScore;
+    }
+
+    public Answer getSubmittedAnswer(){
+        return submittedAnswer;
+    }
+
+    public ArrayList<Answer> getSubmittedAnswers(){
+        return submittedAnswers;
     }
 
     public void setAnswers(ArrayList<Answer> answers){
@@ -50,6 +61,20 @@ public class Question {
         return answers;
     }
 
+    public String getCorrectAnswer(){
+        return answers.get(0).toString();
+    }
+
+    public ArrayList<String> getCorrectAnswers(){
+        ArrayList<String> correctAnswers = new ArrayList<>();
+        for(Answer answer : answers){
+            if(answer.isCorrect)
+                correctAnswers.add(answer.toString());
+        }
+        return correctAnswers;
+    }
+
+
     public ArrayList<MatchingAnswer> getMatchingAnswers() {
         return matchingAnswers;
     }
@@ -62,11 +87,13 @@ public class Question {
                 break;
             }
         }
+        submittedAnswer = new Answer(selectedAnswer, score > 0);
         return score;
     }
 
     public int submitMultipleAnswers(ArrayList<String> selectedAnswers){
         score = 0;
+        submittedAnswers = new ArrayList<>();
         if(questionType == QuestionType.MULTI_ANSWER){
             HashSet<String> checkedAnswers = new HashSet<>();
             for(int i = 0; i < selectedAnswers.size(); i++){
@@ -74,39 +101,50 @@ public class Question {
                 if(checkedAnswers.contains(selectedAnswer)){
                     continue;
                 }
+                boolean isCorrect = false;
                 checkedAnswers.add(selectedAnswer);
                 for(Answer answer : answers){
                     if(answer.isCorrect && answer.toString().equalsIgnoreCase(selectedAnswer)){
                         if(answer.order == 0 || answer.order == i + 1){
                             score++;
+                            isCorrect = true;
                         }
                     }
                 }
+                submittedAnswers.add(new Answer(selectedAnswer, isCorrect));
             }
         }else if(questionType == QuestionType.MULTI_CHOICE_MULTI_ANSWER){
+            score = 1;
             for(Answer answer : answers){
                 if(answer.isCorrect && !selectedAnswers.contains(answer.toString())){
-                    return 0;
+                    score = 0;
                 }
                 if(!answer.isCorrect && selectedAnswers.contains(answer.toString())){
-                    return 0;
+                    score = 0;
                 }
             }
-            score = 1;
+            ArrayList<String> correctAnswers = getCorrectAnswers();
+            for(String selectedAnswer : selectedAnswers){
+                boolean isCorrect = correctAnswers.contains(selectedAnswer);
+                submittedAnswers.add(new Answer(selectedAnswer, isCorrect));
+            }
         }
         return score;
     }
 
     public int submitMatches(ArrayList<String> leftMatches, ArrayList<String> rightMatches){
-        score = 0;
+        score = 1;
+        submittedAnswers = new ArrayList<>();
         for(int i = 0; i < leftMatches.size(); i++){
             String left = leftMatches.get(i);
             String right = rightMatches.get(i);
             if(!matchesMap.containsKey(left) || !matchesMap.get(left).equals(right)){
-                return 0;
+                score = 0;
+                submittedAnswers.add(new Answer(right, false));
+            }else{
+                submittedAnswers.add(new Answer(right, true));
             }
         }
-        score = 1;
         return score;
     }
 }

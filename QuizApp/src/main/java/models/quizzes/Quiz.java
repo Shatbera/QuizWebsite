@@ -22,6 +22,8 @@ public class Quiz {
     private Instant quizStartTime;
     private int quizTimeTaken;
 
+    private boolean quizEnded = false;
+
     public Quiz(int id, int userId, String title, String description, boolean randomize, DisplayType displayType, boolean immediateCorrection){
         this.id = id;
         this.userId = userId;
@@ -54,7 +56,11 @@ public class Quiz {
     }
 
     public void endQuiz(){
+        if(quizEnded){
+            return;
+        }
         quizTimeTaken = (int)Duration.between(quizStartTime, Instant.now()).getSeconds();
+        quizEnded = true;
     }
 
     public int getQuizTimeTaken(){
