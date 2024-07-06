@@ -13,6 +13,7 @@
             background-color: #f4f4f4;
             padding: 20px;
             box-sizing: border-box;
+            align-content: center;
         }
         .question-container {
             background-color: #ffffff;
@@ -86,10 +87,10 @@
             <h3>Correct answers:</h3>
             <ul class="answers-list">
                 <%
-                    ArrayList<Answer> correctAnswers = question.getAnswers();
-                    for (Answer correctAnswer : correctAnswers) {
+                    ArrayList<String> correctAnswers = question.getCorrectAnswers();
+                    for (String correctAnswer : correctAnswers) {
                 %>
-                <li class="correct"><%= correctAnswer.toString() %></li>
+                <li class="correct"><%= correctAnswer %></li>
                 <%
                     }
                 %>

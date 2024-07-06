@@ -20,20 +20,43 @@ public class SubmitAnswerServlet extends HttpServlet {
         HttpSession session = req.getSession();
         Quiz currentQuiz = (Quiz) session.getAttribute("currentQuiz");
 
+        if(currentQuiz.displayType == Quiz.DisplayType.OnePage) {
+            submitAllAnswers(req, resp, currentQuiz);
+        }else{
+            submitSingleAnswer(req, resp, currentQuiz);
+        }
+    }
+
+    private void submitSingleAnswer(HttpServletRequest req, HttpServletResponse resp, Quiz currentQuiz) throws ServletException, IOException{
+        String questionId = req.getParameter("questionId");
+        int id = Integer.parseInt(questionId);
+        Question question = currentQuiz.getQuestion(id);
+        submitQuestion(req, resp, question);
+        if(currentQuiz.immediateCorrection) {
+            req.setAttribute("currentQuestion", question);
+            req.getRequestDispatcher("checkAnswerPage.jsp").forward(req, resp);
+        }else{
+            req.getRequestDispatcher("multiplePageQuestions.jsp").forward(req, resp);
+        }
+    }
+
+    private void submitAllAnswers(HttpServletRequest req, HttpServletResponse resp, Quiz currentQuiz) throws ServletException, IOException {
         String[] questionIds = req.getParameterValues("questionId");
         for(String questionId : questionIds) {
             int id = Integer.parseInt(questionId);
             Question question = currentQuiz.getQuestion(id);
-
-            handleSingleAnswerQuestion(req, resp, question);
-            handleMultiAnswerQuestion(req, resp, question);
-            handleMatchingQuestion(req, resp, question);
-            handleMultiChoiceQuestion(req, resp, question);
-            handleMultiChoiceMultiAnswerQuestion(req, resp, question);
+            submitQuestion(req, resp, question);
         }
-
         currentQuiz.endQuiz();
         req.getRequestDispatcher("resultpage.jsp").forward(req, resp);
+    }
+
+    private void submitQuestion(HttpServletRequest req, HttpServletResponse resp, Question question) throws ServletException, IOException {
+        handleSingleAnswerQuestion(req, resp, question);
+        handleMultiAnswerQuestion(req, resp, question);
+        handleMatchingQuestion(req, resp, question);
+        handleMultiChoiceQuestion(req, resp, question);
+        handleMultiChoiceMultiAnswerQuestion(req, resp, question);
     }
 
     private void handleSingleAnswerQuestion(HttpServletRequest req, HttpServletResponse resp, Question question) throws ServletException, IOException {
@@ -44,7 +67,7 @@ public class SubmitAnswerServlet extends HttpServlet {
         question.submitAnswer(req.getParameter("answer_"+question.id));
     }
 
-    private void handleMultiAnswerQuestion(HttpServletRequest req, HttpServletResponse resp, Question question) throws ServletException, IOException {
+    private void handleMatchingQuestion(HttpServletRequest req, HttpServletResponse resp, Question question) throws ServletException, IOException {
         if(question.questionType != Question.QuestionType.MATCHING)
             return;
         ArrayList<String> leftMatches = new ArrayList<>();
@@ -56,10 +79,10 @@ public class SubmitAnswerServlet extends HttpServlet {
         question.submitMatches(leftMatches, rightMatches);
     }
 
-    private void handleMatchingQuestion(HttpServletRequest req, HttpServletResponse resp, Question question) throws ServletException, IOException {
+    private void handleMultiAnswerQuestion(HttpServletRequest req, HttpServletResponse resp, Question question) throws ServletException, IOException {
         if(question.questionType != Question.QuestionType.MULTI_ANSWER)
             return;
-        int numberOfAnswers = question.getAnswers().size();
+        int numberOfAnswers = question.getCorrectAnswers().size();
         ArrayList<String> selectedAnswers = new ArrayList<String>();
         for(int i = 0; i < numberOfAnswers; i++){
             String selectedAnswer = req.getParameter("answer_"+question.id+"_" + i);

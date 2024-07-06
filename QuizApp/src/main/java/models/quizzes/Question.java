@@ -20,10 +20,16 @@ public class Question {
     private int score = 0;
     private int maxScore = 1;
 
+    private boolean submitted = false;
+
     public Question(int id, QuestionType questionType, String questionText){
         this.id = id;
         this.questionType = questionType;
         this.questionText = questionText;
+    }
+
+    public boolean isSubmitted(){
+        return submitted;
     }
 
     public int getScore(){
@@ -45,7 +51,11 @@ public class Question {
     public void setAnswers(ArrayList<Answer> answers){
         this.answers = answers;
         if(questionType == QuestionType.MULTI_ANSWER){
-            maxScore = answers.size();
+            maxScore = 0;
+            for(Answer answer : answers){
+                if(answer.isCorrect)
+                    maxScore++;
+            }
         }
     }
 
@@ -88,6 +98,7 @@ public class Question {
             }
         }
         submittedAnswer = new Answer(selectedAnswer, score > 0);
+        submitted = true;
         return score;
     }
 
@@ -129,6 +140,7 @@ public class Question {
                 submittedAnswers.add(new Answer(selectedAnswer, isCorrect));
             }
         }
+        submitted = true;
         return score;
     }
 
@@ -145,6 +157,7 @@ public class Question {
                 submittedAnswers.add(new Answer(right, true));
             }
         }
+        submitted = true;
         return score;
     }
 }

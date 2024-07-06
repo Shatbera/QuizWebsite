@@ -47,9 +47,9 @@ CREATE TABLE matches(
 
 -- Insert quizzes
 INSERT INTO quizzes (user_id, title, description, randomize, display_type, immediate_correction) VALUES
-(0, 'General Knowledge Quiz', 'Test your general knowledge.', 0, 'one_page', 1),
-(0, 'Math Quiz', 'Solve these math problems.', 1, 'multiple_page', 0),
-(0, 'Science Quiz', 'A quiz on various science topics.', 0, 'one_page', 1);
+(0, 'General Knowledge Quiz', 'Test your general knowledge.', 0, 'one_page', 0),
+(0, 'Math Quiz', 'Solve these math problems.', 1, 'multiple_page', 1),
+(0, 'Science Quiz', 'A quiz on various science topics.', 0, 'one_page', 0);
 
 -- Insert questions for General Knowledge Quiz (id=1)
 INSERT INTO questions (quiz_id, question_type, question_text) VALUES
