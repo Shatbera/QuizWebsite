@@ -132,7 +132,7 @@
         }
 
         .button {
-            display: inline-block;
+            /*display: inline-block;*/
             padding: 10px 20px;
             background-color: #4CAF50;
             color: white;

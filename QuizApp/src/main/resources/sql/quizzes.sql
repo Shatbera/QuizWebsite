@@ -1,6 +1,7 @@
 USE mydatabase;
 
 -- Drop existing tables if they exist
+DROP TABLE IF EXISTS quiz_attempts;
 DROP TABLE IF EXISTS matches;
 DROP TABLE IF EXISTS answers;
 DROP TABLE IF EXISTS questions;
