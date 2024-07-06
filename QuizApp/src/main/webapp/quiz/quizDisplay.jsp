@@ -28,7 +28,6 @@
 			margin-top: 10px;
 		}
 		.details-btn {
-			display: inline-block;
 			padding: 10px 20px;
 			background-color: #007bff;
 			color: #fff;
