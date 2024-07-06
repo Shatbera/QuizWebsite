@@ -16,3 +16,4 @@
         %><%@ include file="matchingQuestion.jsp" %><%
     }
 %>
+<input type="hidden" name="questionId" value="<%= question.id %>">

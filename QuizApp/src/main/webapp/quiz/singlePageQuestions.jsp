@@ -12,15 +12,18 @@
     %>
 </head>
 <body>
-    <%
-        for(Question question : questions) {
+    <form id="quizForm" action="SubmitAnswerServlet" method="post">
+        <%
+            for(Question question : questions) {
 
-    %>
-    <div class="question-item">
-        <%@ include file="question.jsp" %>
-    </div>
-    <%
-        }
-    %>
+        %>
+        <div class="question-item">
+            <%@ include file="question.jsp" %>
+        </div>
+        <%
+            }
+        %>
+        <input type="submit" value="Submit All Answers">
+    </form>
 </body>
 </html>

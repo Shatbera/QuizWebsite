@@ -10,7 +10,7 @@
 <body>
 <h1><%= question.questionText %></h1>
 
-<form class="submit-answer" action="SubmitAnswerServlet" method="post">
+<%--<form class="submit-answer" action="SubmitAnswerServlet" method="post">--%>
     <%
         ArrayList<MatchingAnswer> matchingAnswers = question.getMatchingAnswers();
         ArrayList<String> leftMatches = new ArrayList<>();
@@ -22,8 +22,8 @@
         }
     %>
     <% for (int i = 0; i < leftMatches.size(); i++) { %>
-    <label for="rightMatch<%= i %>"><%= leftMatches.get(i) %>:</label>
-    <select id="rightMatch<%= i %>" name="rightMatch<%= i %>">
+    <label for="rightMatch_<%= question.id %>_<%= i %>"><%= leftMatches.get(i) %>:</label>
+    <select id="rightMatch_<%= question.id %>_<%= i %>" name="rightMatch_<%= question.id %>_<%= i %>">
         <% for (String rightMatch : rightMatches) { %>
         <option value="<%= rightMatch %>"><%= rightMatch %></option>
         <% } %>
@@ -32,7 +32,6 @@
     <% } %>
 
     <input type="submit" value="Submit Answer">
-    <input type="hidden" name="questionId" value="<%= question.id %>">
-</form>
+<%--</form>--%>
 </body>
 </html>

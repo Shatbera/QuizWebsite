@@ -18,12 +18,11 @@
 
 <img src="<%= question.questionText %>" alt="Picture for response" class="question-image"/>
 
-<form class="submit-answer" action="SubmitAnswerServlet" method="post">
-    <label for="answer">Your Answer:</label>
-    <input type="text" id="answer" name="answer" required>
+<%--<form class="submit-answer" action="SubmitAnswerServlet" method="post">--%>
+    <label for="answer_<%= question.id %>">Your Answer:</label>
+    <input type="text" id="answer_<%= question.id %>" name="answer_<%= question.id %>" required>
     <br><br>
     <input type="submit" value="Submit Answer">
-    <input type="hidden" name="questionId" value="<%= question.id %>">
-</form>
+<%--</form>--%>
 </body>
 </html>

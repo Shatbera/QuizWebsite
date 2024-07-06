@@ -19,16 +19,18 @@ public class SubmitAnswerServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         Quiz currentQuiz = (Quiz) session.getAttribute("currentQuiz");
-        int id = Integer.parseInt(req.getParameter("questionId"));
-        Question question = currentQuiz.getQuestion(id);
 
-        handleSingleAnswerQuestion(req, resp, question);
-        handleMultiAnswerQuestion(req, resp, question);
-        handleMatchingQuestion(req, resp, question);
-        handleMultiChoiceQuestion(req, resp, question);
-        handleMultiChoiceMultiAnswerQuestion(req, resp, question);
+        String[] questionIds = req.getParameterValues("questionId");
+        for(String questionId : questionIds) {
+            int id = Integer.parseInt(questionId);
+            Question question = currentQuiz.getQuestion(id);
 
-        System.out.println("submitted: "+question.questionText);
+            handleSingleAnswerQuestion(req, resp, question);
+            handleMultiAnswerQuestion(req, resp, question);
+            handleMatchingQuestion(req, resp, question);
+            handleMultiChoiceQuestion(req, resp, question);
+            handleMultiChoiceMultiAnswerQuestion(req, resp, question);
+        }
     }
 
     private void handleSingleAnswerQuestion(HttpServletRequest req, HttpServletResponse resp, Question question) throws ServletException, IOException {
@@ -36,7 +38,7 @@ public class SubmitAnswerServlet extends HttpServlet {
                 question.questionType != Question.QuestionType.FILL_IN_BLANK &&
                 question.questionType != Question.QuestionType.PICTURE_RESPONSE)
             return;
-        question.submitAnswer(req.getParameter("answer"));
+        question.submitAnswer(req.getParameter("answer_"+question.id));
     }
 
     private void handleMultiAnswerQuestion(HttpServletRequest req, HttpServletResponse resp, Question question) throws ServletException, IOException {
@@ -46,7 +48,7 @@ public class SubmitAnswerServlet extends HttpServlet {
         ArrayList<String> rightMatches = new ArrayList<>();
         for (int i = 0; i < question.getMatchingAnswers().size(); i++) {
             leftMatches.add(question.getMatchingAnswers().get(i).leftMatch);
-            rightMatches.add(req.getParameter("rightMatch" + i));
+            rightMatches.add(req.getParameter("rightMatch_"+question.id+"_" + i));
         }
         question.submitMatches(leftMatches, rightMatches);
     }
@@ -57,7 +59,7 @@ public class SubmitAnswerServlet extends HttpServlet {
         int numberOfAnswers = question.getAnswers().size();
         ArrayList<String> selectedAnswers = new ArrayList<String>();
         for(int i = 0; i < numberOfAnswers; i++){
-            String selectedAnswer = req.getParameter("answer" + i);
+            String selectedAnswer = req.getParameter("answer_"+question.id+"_" + i);
             selectedAnswers.add(selectedAnswer);
         }
         question.submitMultipleAnswers(selectedAnswers);
@@ -66,14 +68,14 @@ public class SubmitAnswerServlet extends HttpServlet {
     private void handleMultiChoiceQuestion(HttpServletRequest req, HttpServletResponse resp, Question question) throws ServletException, IOException {
         if(question.questionType != Question.QuestionType.MULTI_CHOICE)
             return;
-        String selectedAnswer = req.getParameter("selectedAnswer");
+        String selectedAnswer = req.getParameter("selectedAnswer_"+question.id);
         question.submitAnswer(selectedAnswer);
     }
 
     private void handleMultiChoiceMultiAnswerQuestion(HttpServletRequest req, HttpServletResponse resp, Question question) throws ServletException, IOException {
         if(question.questionType != Question.QuestionType.MULTI_CHOICE_MULTI_ANSWER)
             return;
-        String[] selectedAnswers = req.getParameterValues("selectedAnswers");
+        String[] selectedAnswers = req.getParameterValues("selectedAnswers_"+question.id);
         if (selectedAnswers != null) {
             ArrayList<String> selectedAnswersList = new ArrayList<>(Arrays.asList(selectedAnswers));
             question.submitMultipleAnswers(selectedAnswersList);

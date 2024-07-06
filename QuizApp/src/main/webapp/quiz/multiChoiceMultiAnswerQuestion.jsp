@@ -8,15 +8,14 @@
 <body>
 <h1><%= question.questionText %></h1>
 
-<form class="submit-answer" action="SubmitAnswerServlet" method="post">
+<%--<form class="submit-answer" action="SubmitAnswerServlet" method="post">--%>
     <% for (Answer answer : question.getAnswers()) { %>
-    <input type="checkbox" id="<%= answer.id %>" name="selectedAnswers" value="<%= answer.toString() %>">
+    <input type="checkbox" id="<%= answer.id %>" name="selectedAnswers_<%= question.id %>" value="<%= answer.toString() %>">
     <label for="<%= answer.id %>"><%= answer.toString() %></label><br>
     <% } %>
 
     <br><br>
     <input type="submit" value="Submit Answer">
-    <input type="hidden" name="questionId" value="<%= question.id %>">
-</form>
+<%--</form>--%>
 </body>
 </html>

@@ -77,10 +77,10 @@ INSERT INTO answers (question_id, answer, is_correct, answer_order) VALUES
 (4, 'Eiffel Tower', TRUE, 0),
 (4, 'Eiffel', TRUE, 0),
 -- For 'Select all countries in Europe.'
-(5, 'France', TRUE, 1),
-(5, 'Germany', TRUE, 2),
-(5, 'Italy', TRUE, 3),
-(5, 'Spain', TRUE, 4);
+(5, 'France', TRUE, 0),
+(5, 'Germany', TRUE, 0),
+(5, 'Italy', TRUE, 0),
+(5, 'Spain', TRUE, 0);
 
 -- Insert questions for Math Quiz (id=2)
 INSERT INTO questions (quiz_id, question_type, question_text) VALUES
