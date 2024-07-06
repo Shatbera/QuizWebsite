@@ -56,4 +56,9 @@ public class QueryGenerator {
         return String.format("update friends set friendship_type = 'APPROVED' where sender_id = %s and receiver_id = %s",
                 fromUserId, toUserId);
     }
+
+    public static String cancelFriendRequest(int fromUserId, int toUserId) {
+        return String.format("delete from friends where sender_id = %s and receiver_id = %s",
+                fromUserId, toUserId);
+    }
 }

@@ -125,7 +125,11 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    document.getElementById('friendStatus').innerHTML = '<span class="friend-status">' + successMessage + '</span>';
+                    if (action === 'cancelFriendRequest') {
+                        document.getElementById('friendStatus').innerHTML = '<button id="addFriendBtn" class="button" onclick="sendFriendRequest(' + userId + ')">Add Friend</button>';
+                    } else {
+                        document.getElementById('friendStatus').innerHTML = '<span class="friend-status">' + successMessage + '</span>';
+                    }
                 } else {
                     if (button) button.disabled = false;
                     alert('Action failed. Please try again.');

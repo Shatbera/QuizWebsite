@@ -40,6 +40,10 @@
         <servlet-name>AcceptFriendRequestServlet</servlet-name>
         <servlet-class>servlets.AcceptFriendRequestServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CancelFriendRequestServlet</servlet-name>
+        <servlet-class>servlets.CancelFriendRequestServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/registerServlet</url-pattern>
@@ -75,5 +79,9 @@
     <servlet-mapping>
         <servlet-name>AcceptFriendRequestServlet</servlet-name>
         <url-pattern>/acceptFriendRequest</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CancelFriendRequestServlet</servlet-name>
+        <url-pattern>/cancelFriendRequest</url-pattern>
     </servlet-mapping>
 </web-app>

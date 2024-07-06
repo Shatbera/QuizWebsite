@@ -227,4 +227,13 @@ public class DatabaseManager {
             throw new RuntimeException(e);
         }
     }
+
+    public boolean cancelFriendRequest(int fromUserId, int toUserId) {
+        try {
+            int executed = statement.executeUpdate(QueryGenerator.cancelFriendRequest(fromUserId, toUserId));
+            return executed > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
