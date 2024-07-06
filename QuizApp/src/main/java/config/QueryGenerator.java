@@ -61,4 +61,9 @@ public class QueryGenerator {
         return String.format("delete from friends where sender_id = %s and receiver_id = %s",
                 fromUserId, toUserId);
     }
+
+    public static String fetchFriendRequests(int id) {
+        return String.format("select u.id as id, u.username as username from users u join friends f on (f.sender_id = u.id) where f.friendship_type = 'PENDING' and f.receiver_id = %s",
+                id);
+    }
 }

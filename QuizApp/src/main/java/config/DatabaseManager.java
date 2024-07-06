@@ -6,6 +6,7 @@ import models.quizzes.Answer;
 import models.quizzes.MatchingAnswer;
 import models.quizzes.Question;
 import models.quizzes.Quiz;
+import models.user.FriendRequest;
 import models.user.User;
 import models.user.UserProfile;
 
@@ -232,6 +233,19 @@ public class DatabaseManager {
         try {
             int executed = statement.executeUpdate(QueryGenerator.cancelFriendRequest(fromUserId, toUserId));
             return executed > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ArrayList<FriendRequest> getFriendRequests(int id) {
+        ArrayList<FriendRequest> users = new ArrayList<>();
+        try {
+            ResultSet resultSet = statement.executeQuery(QueryGenerator.fetchFriendRequests(id));
+            while (resultSet.next()) {
+                users.add(new FriendRequest(resultSet.getInt("id"), resultSet.getString("username")));
+            }
+            return users;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

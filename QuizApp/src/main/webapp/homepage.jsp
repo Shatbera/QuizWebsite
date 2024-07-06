@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="config.DatabaseManager, models.quizzes.Quiz" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="models.user.FriendRequest" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -52,12 +53,86 @@
             cursor: pointer;
             margin-left: 10px;
         }
+
+        .friend-request-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .friend-request-item {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .friend-request-item:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .friend-request-item a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .friend-request-item a:hover {
+            color: #0056b3;
+        }
+
+        .friend-request-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .friend-request-buttons button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+        }
+
+        .friend-request-buttons button:hover {
+            transform: translateY(-2px);
+        }
+
+        .friend-request-buttons button:active {
+            transform: translateY(0);
+        }
+
+        .accept-button {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .accept-button:hover {
+            background-color: #218838;
+        }
+
+        .decline-button {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .decline-button:hover {
+            background-color: #c82333;
+        }
     </style>
 </head>
 <body>
 <%
     String username = (String) session.getAttribute("username");
-    if (username == null) {
+    Integer id = (Integer) session.getAttribute("id");
+    if (id == null) {
         //response.sendRedirect("login.jsp");
     }
 %>
@@ -124,7 +199,80 @@
 
 <div class="section" id="friends-activities">
     <h2>Friends' Activities</h2>
-    <!-- there must be subsections -->
+
+    <div class="subsection" id="friend-requests">
+        <h3>Friend Requests</h3>
+        <%
+            ArrayList<FriendRequest> friendRequests = db.getFriendRequests(id);
+            if (friendRequests != null && !friendRequests.isEmpty()) {
+        %>
+        <ul class="friend-request-list">
+            <%
+                for (FriendRequest requester : friendRequests) {
+            %>
+            <li class="friend-request-item">
+                <a href="userProfile?username=<%= requester.getUsername() %>"><%= requester.getUsername() %>
+                </a>
+                <div class="friend-request-buttons">
+                    <button class="accept-button" onclick="acceptFriendRequest(<%= requester.getId() %>)">Accept
+                    </button>
+                    <button class="decline-button" onclick="declineFriendRequest(<%= requester.getId() %>)">Decline
+                    </button>
+                </div>
+            </li>
+            <%
+                }
+            %>
+        </ul>
+        <%
+        } else {
+        %>
+        <p>No pending friend requests.</p>
+        <%
+            }
+        %>
+    </div>
+
+
 </div>
+
+<script>
+    function respondToFriendRequest(servlet, requesterId, action) {
+        fetch(servlet, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'userId=' + requesterId
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const requestItem = document.querySelector(`.friend-request-item button[onclick*="${requesterId}"]`).closest('li');
+                    requestItem.remove();
+
+                    if (document.querySelectorAll('.friend-request-item').length === 0) {
+                        document.getElementById('friend-requests').innerHTML = '<p>No pending friend requests.</p>';
+                    }
+
+                    alert(action === 'accept' ? 'Friend request accepted!' : 'Friend request declined.');
+                } else {
+                    alert('Failed to ' + action + ' friend request. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
+    }
+
+    function acceptFriendRequest(fromUserId) {
+        respondToFriendRequest('acceptFriendRequest', fromUserId, 'accept');
+    }
+
+    function declineFriendRequest(toUserId) {
+        respondToFriendRequest('cancelFriendRequest', toUserId, 'decline');
+    }
+</script>
 </body>
 </html>
