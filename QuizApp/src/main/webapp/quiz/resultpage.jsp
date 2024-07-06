@@ -1,5 +1,6 @@
 <%@ page import="models.quizzes.Quiz" %>
 <%@ page import="models.quizzes.Question" %>
+<%@ page import="config.DatabaseManager" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <!DOCTYPE html>
@@ -80,6 +81,11 @@
     </div>
 
 </div>
+<%
+    // Save quiz attempt to the database
+    DatabaseManager db = (DatabaseManager) application.getAttribute(DatabaseManager.NAME);
+    db.saveQuizAttempt((int) session.getAttribute("id"), quiz);
+%>
 
 </body>
 </html>

@@ -45,6 +45,18 @@ CREATE TABLE matches(
     FOREIGN KEY (question_id) REFERENCES questions(id) ON DELETE CASCADE
 );
 
+create table quiz_attempts(
+    id int auto_increment primary key,
+    quiz_id int not null,
+    user_id int not null,
+    score int not null,
+    time_taken bigint not null,
+    attempt_time timestamp default current_timestamp,
+    foreign key (quiz_id) references quizzes(id),
+    foreign key (user_id) references users(id),
+    unique (quiz_id, user_id, attempt_time)
+);
+
 -- Insert quizzes
 INSERT INTO quizzes (user_id, title, description, randomize, display_type, immediate_correction) VALUES
 (0, 'General Knowledge Quiz', 'Test your general knowledge.', 0, 'one_page', 0),

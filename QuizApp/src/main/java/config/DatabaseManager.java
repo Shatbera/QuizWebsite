@@ -307,4 +307,13 @@ public class DatabaseManager {
             throw new RuntimeException(e);
         }
     }
+
+    public boolean saveQuizAttempt(int userId, Quiz q) {
+        try {
+            int i = statement.executeUpdate(QueryGenerator.saveQuizAttempt(userId, q.id, q.getScore(), q.getQuizTimeTaken()));
+            return i > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

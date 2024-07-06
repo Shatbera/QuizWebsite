@@ -84,4 +84,9 @@ public class QueryGenerator {
         return String.format("insert into user_messages (sender_id, recipient_id, message) values (%s, %s, %s)",
                 senderId, recipientId, quoted(message));
     }
+
+    public static String saveQuizAttempt(int userId, int id, int score, int timeTaken) {
+        return String.format("insert into quiz_attempts (quiz_id, user_id, score, time_taken) values (%s, %s, %s, %s)",
+                userId, id, score, timeTaken);
+    }
 }
