@@ -1,5 +1,7 @@
 package models.user;
 
+import util.Utils;
+
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
@@ -9,7 +11,7 @@ public class Message {
 
     public Message(String text, Timestamp sendTime) {
         this.text = text;
-        this.sendTime = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(sendTime);
+        this.sendTime = Utils.formatTimestamp(sendTime);
     }
 
     public String getText() {

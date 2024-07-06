@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import util.PasswordHashUtil;
+import util.Utils;
 
 import java.io.IOException;
 
@@ -27,7 +27,7 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
 
-        String hashedPassword = PasswordHashUtil.hashPassword(password);
+        String hashedPassword = Utils.hashPassword(password);
         DatabaseManager db = (DatabaseManager) getServletContext().getAttribute(DatabaseManager.NAME);
         boolean userCreated = db.saveUser(username, email, hashedPassword);
         Integer userId = db.getUserId(username);

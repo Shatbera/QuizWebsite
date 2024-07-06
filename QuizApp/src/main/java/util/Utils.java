@@ -2,8 +2,10 @@ package util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
-public class PasswordHashUtil {
+public class Utils {
     public static String hashPassword(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -16,5 +18,9 @@ public class PasswordHashUtil {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static String formatTimestamp(Timestamp timestamp) {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm").format(timestamp);
     }
 }

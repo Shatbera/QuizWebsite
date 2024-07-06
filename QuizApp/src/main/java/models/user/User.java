@@ -1,13 +1,5 @@
 package models.user;
 
-import config.DatabaseConfig;
-import util.PasswordHashUtil;
-
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-
 public class User {
     private int id;
     private String username;

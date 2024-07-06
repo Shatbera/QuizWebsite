@@ -1,11 +1,9 @@
 package config;
 
 import models.enums.FriendRequestType;
-import models.quizzes.Answer;
-import models.quizzes.MatchingAnswer;
-import models.quizzes.Question;
-import models.quizzes.Quiz;
+import models.quizzes.*;
 import models.user.*;
+import util.Utils;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -312,6 +310,36 @@ public class DatabaseManager {
         try {
             int i = statement.executeUpdate(QueryGenerator.saveQuizAttempt(userId, q.id, q.getScore(), q.getQuizTimeTaken()));
             return i > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<Quiz> getCreatedQuizzes(int id) {
+        List<Quiz> quizzes = new ArrayList<>();
+        try {
+            ResultSet resultSet = statement.executeQuery(QueryGenerator.fetchCreatedQuizzes(id));
+            while (resultSet.next()) {
+                Quiz quiz = getQuizObject(resultSet);
+                quizzes.add(quiz);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return quizzes;
+    }
+
+    public  List<QuizAttempt> fetchPastResults(int userId, int quizId) {
+        List<QuizAttempt> quizAttempts = new ArrayList<>();
+        try {
+            ResultSet resultSet = statement.executeQuery(QueryGenerator.fetchPastResults(userId, quizId));
+            while(resultSet.next()) {
+                int score = resultSet.getInt("score");
+                String attemptTime = Utils.formatTimestamp(resultSet.getTimestamp("attemptTime"));
+                int timeTaken = resultSet.getInt("timeTaken");
+                quizAttempts.add(new QuizAttempt(score, timeTaken, attemptTime));
+            }
+            return quizAttempts;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

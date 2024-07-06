@@ -253,10 +253,28 @@
 
 <div class="section" id="created-quizzes">
     <h2>Your Created Quizzes</h2>
-    <!-- there must be subsections -->
-</div>
-<div class="section" id="message-section">
-    <a href="messages.jsp" class="button">Send Message to a Friend</a>
+    <%
+        if (db != null) {
+            List<Quiz> myQuizzes = db.getCreatedQuizzes((int) session.getAttribute("id"));
+            if (myQuizzes != null && !myQuizzes.isEmpty()) {
+                for (Quiz quiz : myQuizzes) {
+    %>
+    <div class="quiz-item">
+        <%@ include file="/quiz/quizDisplay.jsp" %>
+    </div>
+    <%
+        }
+    } else {
+    %>
+    <p>No quizzes created.</p>
+    <%
+        }
+    } else {
+    %>
+    <p>No quizzes created.</p>
+    <%
+        }
+    %>
 </div>
 <div class="section" id="friends-activities">
     <h2>Friends' Activities</h2>
@@ -333,7 +351,9 @@
             }
         %>
     </div>
-
+    <div class="section" id="message-section">
+        <a href="messages.jsp" class="button">Send Message to a Friend</a>
+    </div>
 </div>
 
 <script>

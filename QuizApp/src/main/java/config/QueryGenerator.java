@@ -89,4 +89,18 @@ public class QueryGenerator {
         return String.format("insert into quiz_attempts (quiz_id, user_id, score, time_taken) values (%s, %s, %s, %s)",
                 userId, id, score, timeTaken);
     }
+
+    public static String fetchCreatedQuizzes(int id) {
+        return String.format("select * from quizzes where user_id = %s", id);
+    }
+
+    public static String fetchPastResults(int userId, int quizId) {
+        return String.format("select score as score, attempt_time as attemptTime, time_taken as timeTaken " +
+                             "from (select qa.score, qa.attempt_time, qa.time_taken, row_number() over (order by qa.attempt_time desc) as row_num " +
+                             "from quiz_attempts qa " +
+                             "join quizzes q on qa.quiz_id = q.id " +
+                             "where qa.user_id = %s and qa.quiz_id = %s) as tbl " +
+                             "where row_num > 1 " +
+                             "order by attempt_time desc", userId, quizId);
+    }
 }

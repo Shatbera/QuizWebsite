@@ -1,21 +1,15 @@
 package servlets;
 
 import config.DatabaseManager;
-import models.user.User;
-import config.DatabaseConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import util.PasswordHashUtil;
+import util.Utils;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Optional;
 
 @WebServlet("/login")
@@ -28,7 +22,7 @@ public class LoginServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        String hashedPassword = PasswordHashUtil.hashPassword(password);
+        String hashedPassword = Utils.hashPassword(password);
 
         DatabaseManager db = (DatabaseManager) getServletContext().getAttribute(DatabaseManager.NAME);
         Optional<Integer> validUser = db.checkUserCredentials(username, hashedPassword);
