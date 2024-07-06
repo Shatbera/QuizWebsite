@@ -44,6 +44,14 @@
         <servlet-name>CancelFriendRequestServlet</servlet-name>
         <servlet-class>servlets.CancelFriendRequestServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DeclineFriendRequestServlet</servlet-name>
+        <servlet-class>servlets.DeclineFriendRequestServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SendMessageServlet</servlet-name>
+        <servlet-class>servlets.SendMessageServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/registerServlet</url-pattern>
@@ -83,5 +91,13 @@
     <servlet-mapping>
         <servlet-name>CancelFriendRequestServlet</servlet-name>
         <url-pattern>/cancelFriendRequest</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeclineFriendRequestServlet</servlet-name>
+        <url-pattern>/declineFriendRequest</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SendMessageServlet</servlet-name>
+        <url-pattern>/sendMessage</url-pattern>
     </servlet-mapping>
 </web-app>

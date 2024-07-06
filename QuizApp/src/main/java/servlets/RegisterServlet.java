@@ -30,11 +30,13 @@ public class RegisterServlet extends HttpServlet {
         String hashedPassword = PasswordHashUtil.hashPassword(password);
         DatabaseManager db = (DatabaseManager) getServletContext().getAttribute(DatabaseManager.NAME);
         boolean userCreated = db.saveUser(username, email, hashedPassword);
+        Integer userId = db.getUserId(username);
         if (userCreated) {
             // Initialize session
             HttpSession session = request.getSession();
             session.setAttribute("user", email);
             session.setAttribute("username", username);
+            session.setAttribute("id", userId);
             request.setAttribute("message", "Registration successful!");
             request.getRequestDispatcher("homepage.jsp").forward(request, response);
         } else {

@@ -1,17 +1,15 @@
 package config;
 
-import com.mysql.cj.util.StringUtils;
 import models.enums.FriendRequestType;
 import models.quizzes.Answer;
 import models.quizzes.MatchingAnswer;
 import models.quizzes.Question;
 import models.quizzes.Quiz;
-import models.user.FriendRequest;
-import models.user.User;
-import models.user.UserProfile;
+import models.user.*;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class DatabaseManager {
@@ -169,6 +167,18 @@ public class DatabaseManager {
         }
     }
 
+    public Integer getUserId(String username) {
+        try {
+            ResultSet execute = statement.executeQuery(QueryGenerator.getUserId(username));
+            if (execute.next()) {
+                return execute.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public ArrayList<User> searchUsers(String prompt, String currentUser) {
         ArrayList<User> users = new ArrayList<>();
         try {
@@ -229,23 +239,70 @@ public class DatabaseManager {
         }
     }
 
-    public boolean cancelFriendRequest(int fromUserId, int toUserId) {
+    public boolean deleteFriendRequest(int fromUserId, int toUserId) {
         try {
-            int executed = statement.executeUpdate(QueryGenerator.cancelFriendRequest(fromUserId, toUserId));
+            int executed = statement.executeUpdate(QueryGenerator.deleteFromFriends(fromUserId, toUserId));
             return executed > 0;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public ArrayList<FriendRequest> getFriendRequests(int id) {
-        ArrayList<FriendRequest> users = new ArrayList<>();
+
+    public ArrayList<FriendResponse> getFriendRequests(int id) {
+        ArrayList<FriendResponse> users = new ArrayList<>();
         try {
             ResultSet resultSet = statement.executeQuery(QueryGenerator.fetchFriendRequests(id));
             while (resultSet.next()) {
-                users.add(new FriendRequest(resultSet.getInt("id"), resultSet.getString("username")));
+                users.add(new FriendResponse(resultSet.getInt("id"), resultSet.getString("username")));
             }
             return users;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<FriendMessage> fetchFriendMessages(int id) {
+        ArrayList<FriendMessage> messages = new ArrayList<>();
+        try {
+            ResultSet resultSet = statement.executeQuery(QueryGenerator.fetchMessages(id));
+            while (resultSet.next()) {
+                int senderId = resultSet.getInt("id");
+                String senderUsername = resultSet.getString("username");
+                String message = resultSet.getString("message");
+                Timestamp sendTime = resultSet.getTimestamp("sendTime");
+                Optional<FriendMessage> friendMessage = messages.stream().filter(m -> m.getSenderId() == senderId).findFirst();
+                if (friendMessage.isPresent()) {
+                    friendMessage.get().getMessages().add(new Message(message, sendTime));
+                } else {
+                    List<Message> messageList = new ArrayList<>();
+                    messageList.add(new Message(message, sendTime));
+                    messages.add(new FriendMessage(senderId, senderUsername, messageList));
+                }
+            }
+            return messages;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ArrayList<FriendResponse> getFriends(Integer userId) {
+        ArrayList<FriendResponse> users = new ArrayList<>();
+        try {
+            ResultSet resultSet = statement.executeQuery(QueryGenerator.fetchFriends(userId));
+            while (resultSet.next()) {
+                users.add(new FriendResponse(resultSet.getInt("id"), resultSet.getString("username")));
+            }
+            return users;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean sendMessage(int senderId, int recipientId, String message) {
+        try {
+            int i = statement.executeUpdate(QueryGenerator.addMessage(senderId, recipientId, message));
+            return i > 0;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

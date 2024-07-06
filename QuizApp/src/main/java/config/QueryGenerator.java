@@ -57,7 +57,7 @@ public class QueryGenerator {
                 fromUserId, toUserId);
     }
 
-    public static String cancelFriendRequest(int fromUserId, int toUserId) {
+    public static String deleteFromFriends(int fromUserId, int toUserId) {
         return String.format("delete from friends where sender_id = %s and receiver_id = %s",
                 fromUserId, toUserId);
     }
@@ -65,5 +65,23 @@ public class QueryGenerator {
     public static String fetchFriendRequests(int id) {
         return String.format("select u.id as id, u.username as username from users u join friends f on (f.sender_id = u.id) where f.friendship_type = 'PENDING' and f.receiver_id = %s",
                 id);
+    }
+
+    public static String fetchFriends(int id) {
+        return String.format("select u.id as id, u.username as username from users u join friends f on ((f.sender_id = u.id and f.receiver_id = %s) or (f.sender_id = %s and f.receiver_id = u.id)) where f.friendship_type = 'APPROVED'",
+                id, id);
+    }
+
+    public static String getUserId(String username) {
+        return String.format("select id as id from users where username = %s", quoted(username));
+    }
+
+    public static String fetchMessages(int id) {
+        return String.format("select u.id as id, u.username as username, m.message as message, m.send_time as sendTime from user_messages m join users u on m.sender_id = u.id where m.recipient_id = %s", id);
+    }
+
+    public static String addMessage(int senderId, int recipientId, String message) {
+        return String.format("insert into user_messages (sender_id, recipient_id, message) values (%s, %s, %s)",
+                senderId, recipientId, quoted(message));
     }
 }

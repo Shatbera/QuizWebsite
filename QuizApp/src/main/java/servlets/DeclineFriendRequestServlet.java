@@ -9,10 +9,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class CancelFriendRequestServlet extends HttpServlet {
+public class DeclineFriendRequestServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int toUserId = Integer.parseInt(request.getParameter("userId"));
-        int fromUserId = (int) request.getSession().getAttribute("id");
+        int fromUserId = Integer.parseInt(request.getParameter("userId"));
+        int toUserId = (int) request.getSession().getAttribute("id");
 
         DatabaseManager db = (DatabaseManager) getServletContext().getAttribute(DatabaseManager.NAME);
         boolean success = db.deleteFriendRequest(fromUserId, toUserId);

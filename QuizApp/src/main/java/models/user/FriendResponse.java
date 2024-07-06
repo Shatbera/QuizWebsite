@@ -1,10 +1,10 @@
 package models.user;
 
-public class FriendRequest {
+public class FriendResponse {
     int id;
     String username;
 
-    public FriendRequest(int id, String username) {
+    public FriendResponse(int id, String username) {
         this.id = id;
         this.username = username;
     }

@@ -1,7 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="config.DatabaseManager, models.quizzes.Quiz" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="models.user.FriendRequest" %>
+<%@ page import="models.user.FriendResponse" %>
+<%@ page import="models.user.FriendResponse" %>
+<%@ page import="models.user.FriendMessage" %>
+<%@ page import="models.user.Message" %>
+<%@ page import="java.util.List" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -126,6 +130,61 @@
         .decline-button:hover {
             background-color: #c82333;
         }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+
+        .friend-message-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .friend-message-item {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            padding: 15px;
+        }
+
+        .friend-message-item h4 {
+            margin-top: 0;
+            color: #007bff;
+        }
+
+        .message-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .message {
+            background-color: white;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+
+        .message p {
+            margin: 0 0 5px 0;
+        }
+
+        .timestamp {
+            font-size: 0.8em;
+            color: #6c757d;
+        }
     </style>
 </head>
 <body>
@@ -196,19 +255,21 @@
     <h2>Your Created Quizzes</h2>
     <!-- there must be subsections -->
 </div>
-
+<div class="section" id="message-section">
+    <a href="messages.jsp" class="button">Send Message to a Friend</a>
+</div>
 <div class="section" id="friends-activities">
     <h2>Friends' Activities</h2>
 
     <div class="subsection" id="friend-requests">
         <h3>Friend Requests</h3>
         <%
-            ArrayList<FriendRequest> friendRequests = db.getFriendRequests(id);
-            if (friendRequests != null && !friendRequests.isEmpty()) {
+            ArrayList<FriendResponse> friendResponses = db.getFriendRequests(id);
+            if (friendResponses != null && !friendResponses.isEmpty()) {
         %>
         <ul class="friend-request-list">
             <%
-                for (FriendRequest requester : friendRequests) {
+                for (FriendResponse requester : friendResponses) {
             %>
             <li class="friend-request-item">
                 <a href="userProfile?username=<%= requester.getUsername() %>"><%= requester.getUsername() %>
@@ -233,6 +294,45 @@
         %>
     </div>
 
+    <div class="subsection" id="friend-messages">
+        <h3>Friends' Messages</h3>
+        <%
+            List<FriendMessage> friendMessages = db.fetchFriendMessages(id);
+            if (friendMessages != null && !friendMessages.isEmpty()) {
+        %>
+        <ul class="friend-message-list">
+            <%
+                for (FriendMessage friendMessage : friendMessages) {
+            %>
+            <li class="friend-message-item">
+                <h4><%= friendMessage.getSenderUsername() %>
+                </h4>
+                <ul class="message-list">
+                    <%
+                        for (Message message : friendMessage.getMessages()) {
+                    %>
+                    <li class="message">
+                        <p><%= message.getText() %>
+                        </p>
+                        <span class="timestamp"><%= message.getSendTime() %></span>
+                    </li>
+                    <%
+                        }
+                    %>
+                </ul>
+            </li>
+            <%
+                }
+            %>
+        </ul>
+        <%
+        } else {
+        %>
+        <p>No messages from friends.</p>
+        <%
+            }
+        %>
+    </div>
 
 </div>
 
@@ -248,12 +348,12 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
+                    // Remove item from UI
                     const requestItem = document.querySelector(`.friend-request-item button[onclick*="${requesterId}"]`).closest('li');
                     requestItem.remove();
 
-                    if (document.querySelectorAll('.friend-request-item').length === 0) {
-                        document.getElementById('friend-requests').innerHTML = '<p>No pending friend requests.</p>';
-                    }
+                    // Optionally, redirect back to homepage after action
+                    // window.location.href = 'userDashboard.jsp';
 
                     alert(action === 'accept' ? 'Friend request accepted!' : 'Friend request declined.');
                 } else {
@@ -271,7 +371,7 @@
     }
 
     function declineFriendRequest(toUserId) {
-        respondToFriendRequest('cancelFriendRequest', toUserId, 'decline');
+        respondToFriendRequest('declineFriendRequest', toUserId, 'decline');
     }
 </script>
 </body>
