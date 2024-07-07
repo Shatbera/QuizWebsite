@@ -26,8 +26,20 @@
         <label id="questionTextLabel_<%= questionId %>" for="questionText_<%= questionId %>">Question:</label>
         <input type="text" id="questionText_<%= questionId %>" name="questionText_<%= questionId %>" required>
     </div>
+    <div id="orderMattersDiv_<%=questionId%>" class="form-group">
+        <input type="checkbox" id="orderMatters_<%=questionId%>" name="orderMatters_<%=questionId%>" value="false">
+        <label for="orderMatters_<%=questionId%>">Order Matters</label>
+    </div>
     <h4>Answers</h4>
-    <div class="form-group">
-        <!-- Answers inputs go here -->
+    <div class="form-group" id="answersContainer_<%=questionId%>">
+        <%--<div id="correctAnswersDiv_<%= questionId %>">
+            <%@ include file="createCorrectAnswers.jsp" %>
+        </div>
+        <div id="matchingAnswersDiv_<%= questionId %>">
+            <%@ include file="createMatchingAnswers.jsp" %>
+        </div>
+        <div id="multipleChoiceDiv_<%= questionId %>">
+            <%@ include file="createMultipleChoiceAnswers.jsp" %>
+        </div>--%>
     </div>
 </div>

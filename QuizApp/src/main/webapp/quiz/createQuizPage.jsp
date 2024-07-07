@@ -8,8 +8,8 @@
             background-color: #f4f4f4;
             display: flex;
             justify-content: center;
-            align-items: center;
-            height: 100vh;
+            align-items: flex-start;
+            min-height: 100vh;
             margin: 0;
         }
 
@@ -44,10 +44,6 @@
             border-radius: 5px;
             border: 1px solid #ccc;
             box-sizing: border-box;
-        }
-
-        .form-group input[type="checkbox"] {
-            width: auto;
         }
 
         .question-header {
@@ -105,7 +101,6 @@
             background-color: #3e8e41;
         }
 
-
         .submit-button {
             padding: 10px 20px;
             border: none;
@@ -156,11 +151,62 @@
             text-align: center;
             line-height: 18px;
         }
+
+        textarea#description {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            resize: vertical;
+            font-size: 16px;
+        }
+
+        .match-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .match-group label {
+            flex: 1;
+            margin-right: 10px;
+        }
+
+        .match-group .match-input {
+            flex: 2;
+            margin-right: 10px;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        .answers-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .answers-group .answer-label {
+            width: 100px;
+            margin-right: 10px;
+        }
+
+        .answers-group .answer-input {
+            flex: 2;
+            margin-right: 10px;
+        }
+
+        .answers-group .correctness-dropdown {
+            width: 100px;
+        }
+
     </style>
     <script>
         let questionCount = 0;
 
-        function toggleImmediateCorrection() {
+        function toggleDisplayType() {
             const displayType = document.getElementById("displayType").value;
             const immediateCorrectionDiv = document.getElementById("immediateCorrectionDiv");
             if (displayType === "Multiple-Page") {
@@ -188,6 +234,8 @@
                     if (questionCount > 1) {
                         document.getElementById("minusButton").disabled = false;
                     }
+
+                    toggleQuestionLabel(questionCount);
                 })
                 .catch(error => console.error('Error loading createQuestionDisplay.jsp:', error));
         }
@@ -212,6 +260,44 @@
             } else {
                 questionTextLabel.textContent = "Question:";
             }
+
+            const orderMattersDiv = document.getElementById("orderMattersDiv_"+questionId);
+            if(questionType === "MULTI_ANSWER"){
+                orderMattersDiv.style.display = "block";
+            }else{
+                orderMattersDiv.style.display = "none";
+            }
+
+           /* const correctAnswersDiv = document.getElementById("correctAnswersDiv_"+questionId);
+            const matchingAnswersDiv = document.getElementById("matchingAnswersDiv_"+questionId);
+            const multipleChoiceDiv = document.getElementById("multipleChoiceDiv_"+questionId);*/
+
+            const displayCorrectAnswersDiv = questionType === "QUESTION_RESPONSE" || questionType === "FILL_IN_BLANK" || questionType === "PICTURE_RESPONSE" || questionType === "MULTI_ANSWER";
+            const displayMatchingAnswersDiv = questionType === "MATCHING";
+            const displayMultipleChoiceDiv = questionType === "MULTI_CHOICE" || questionType === "MULTI_CHOICE_MULTI_ANSWER";
+
+           /* correctAnswersDiv.style.display = displayCorrectAnswersDiv ? "block" : "none";
+            matchingAnswersDiv.style.display = displayMatchingAnswersDiv ? "block" : "none";
+            multipleChoiceDiv.style.display = displayMultipleChoiceDiv ? "block" : "none";*/
+
+            const answersContainer = document.getElementById("answersContainer_"+questionId);
+            const answersDiv = document.createElement("div");
+            var targetJsp = 'createCorrectAnswers';
+            if(displayMatchingAnswersDiv){
+                targetJsp = 'createMatchingAnswers';
+            }else if(displayMultipleChoiceDiv){
+                targetJsp = 'createMultipleChoiceAnswers';
+            }
+            fetch(targetJsp+'.jsp?questionId=' + questionId)
+                .then(response => response.text())
+                .then(data => {
+                    answersDiv.innerHTML = data.replace(/_0/g, "_" + questionCount);
+                    if(answersContainer.firstChild){
+                        answersContainer.removeChild(answersContainer.firstChild);
+                    }
+                    answersContainer.appendChild(answersDiv);
+                })
+                .catch(error => console.error('Error loading createQuestionDisplay.jsp:', error));
         }
     </script>
 </head>
@@ -226,8 +312,9 @@
 
         <div class="form-group">
             <label for="description">Description:</label>
-            <input type="text" id="description" name="description" required>
+            <textarea id="description" name="description" rows="5" required></textarea>
         </div>
+
 
         <div class="form-group">
             <input type="checkbox" id="randomize" name="randomize" value="false">
@@ -236,7 +323,7 @@
 
         <div class="form-group">
             <label for="displayType">Display Type:</label>
-            <select id="displayType" name="displayType" onchange="toggleImmediateCorrection()">
+            <select id="displayType" name="displayType" onchange="toggleDisplayType()">
                 <option value="Single-Page">Single-Page</option>
                 <option value="Multiple-Page">Multiple-Page</option>
             </select>
@@ -264,7 +351,7 @@
 </div>
 
 <script>
-    toggleImmediateCorrection();
+    toggleDisplayType();
     addQuestion();
 </script>
 </body>

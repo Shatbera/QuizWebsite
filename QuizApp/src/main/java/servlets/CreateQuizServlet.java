@@ -1,5 +1,6 @@
 package servlets;
 
+import config.DatabaseManager;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,10 +26,8 @@ public class CreateQuizServlet extends HttpServlet {
         Quiz quiz = new Quiz(-1, userId, title, description, randomize, displayType, immediateCorrection);
 
         String[] questionIds = req.getParameterValues("questionId");
-        for(int i = 0; i < questionIds.length; i++){
-            System.out.println(questionIds[i]);
-        }
-        /*ArrayList<Question> questions = new ArrayList<>();
+
+        ArrayList<Question> questions = new ArrayList<>();
         for(int i = 0; i < questionIds.length; i++){
             Question question = getQuestion(req, resp, questionIds[i]);
             questions.add(question);
@@ -37,7 +36,8 @@ public class CreateQuizServlet extends HttpServlet {
         quiz.setQuestions(questions);
 
         DatabaseManager db = (DatabaseManager) req.getServletContext().getAttribute(DatabaseManager.NAME);
-        db.saveQuiz(quiz);*/
+        db.saveQuiz(quiz);
+        req.getRequestDispatcher("../user/homepage.jsp").forward(req, resp);
     }
 
     private Question getQuestion(HttpServletRequest req, HttpServletResponse resp, String questionId) throws ServletException, IOException{
@@ -60,6 +60,9 @@ public class CreateQuizServlet extends HttpServlet {
         String[] rightMatches = req.getParameterValues("rightMatch_"+questionId);
         ArrayList<MatchingAnswer> matchingAnswers = new ArrayList<>();
         for(int i = 0; i < leftMatches.length; i++){
+            if(leftMatches[i].isBlank() || rightMatches[i].isBlank()){
+                continue;
+            }
             MatchingAnswer matchingAnswer = new MatchingAnswer(-1, leftMatches[i], rightMatches[i]);
             matchingAnswers.add(matchingAnswer);
         }
@@ -71,6 +74,9 @@ public class CreateQuizServlet extends HttpServlet {
         String[] isCorrectAnswers = req.getParameterValues("isCorrect_"+questionId);
         ArrayList<Answer> answersList = new ArrayList<>();
         for(int i = 0; i < answers.length; i++){
+            if(answers[i].isBlank()){
+                continue;
+            }
             boolean isCorrect = isCorrectAnswers == null || Boolean.parseBoolean(isCorrectAnswers[i]);
             Answer answer = new Answer(-1, answers[i], isCorrect, orderMatters ? i + 1 : 0);
             answersList.add(answer);

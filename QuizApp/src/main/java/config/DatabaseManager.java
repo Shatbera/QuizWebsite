@@ -16,10 +16,11 @@ public class DatabaseManager {
     private static final String database = "mydatabase";
 
     private Statement statement;
+    private Connection connection;
 
     public DatabaseManager() {
         try {
-            Connection connection = DatabaseConfig.getConnection();
+            connection = DatabaseConfig.getConnection();
             statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.execute("USE " + database);
         } catch (SQLException e) {
@@ -393,22 +394,43 @@ public class DatabaseManager {
 
     public void saveQuiz(Quiz quiz) {
         String displayType = quiz.displayType == Quiz.DisplayType.OnePage ? "one_page" : "multiple_page";
+        PreparedStatement quizStatement = null;
+        PreparedStatement questionStatement = null;
         try {
-            statement.executeQuery(QueryGenerator.createQuiz(quiz.userId, quiz.title, quiz.description, quiz.randomize, displayType, quiz.immediateCorrection));
-            for(Question question : quiz.getQuestions()) {
-                statement.executeQuery(QueryGenerator.createQuestion(quiz.id, questionTypeToString(question.questionType), question.questionText));
-                if(question.questionType == Question.QuestionType.MATCHING){
-                    for(MatchingAnswer matchingAnswer : question.getMatchingAnswers()){
-                        statement.executeQuery(QueryGenerator.createMatchingAnswer(question.id, matchingAnswer.leftMatch, matchingAnswer.rightMatch));
-                    }
-                }else{
-                    for(Answer answer : question.getAnswers()) {
-                        statement.executeQuery(QueryGenerator.createAnswer(question.id, answer.toString(), answer.isCorrect, answer.order));
+            quizStatement = connection.prepareStatement(QueryGenerator.createQuiz(quiz.userId, quiz.title, quiz.description, quiz.randomize, displayType, quiz.immediateCorrection), Statement.RETURN_GENERATED_KEYS);
+            quizStatement.executeUpdate();
+            ResultSet quizRs = quizStatement.getGeneratedKeys();
+            if (quizRs.next()) {
+                int quizId = quizRs.getInt(1);
+                for(Question question : quiz.getQuestions()) {
+                    questionStatement = connection.prepareStatement(QueryGenerator.createQuestion(quizId, questionTypeToString(question.questionType), question.questionText), Statement.RETURN_GENERATED_KEYS);
+                    questionStatement.executeUpdate();
+                    ResultSet questionRs = questionStatement.getGeneratedKeys();
+                    if (questionRs.next()) {
+                        int questionId = questionRs.getInt(1);
+                        if(question.questionType == Question.QuestionType.MATCHING){
+                            for(MatchingAnswer matchingAnswer : question.getMatchingAnswers()){
+                                statement.executeUpdate(QueryGenerator.createMatchingAnswer(questionId, matchingAnswer.leftMatch, matchingAnswer.rightMatch));
+                            }
+                        }else{
+                            for(Answer answer : question.getAnswers()) {
+                                statement.executeUpdate(QueryGenerator.createAnswer(questionId, answer.toString(), answer.isCorrect, answer.order));
+                            }
+                        }
                     }
                 }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }finally {
+            try {
+                if(quizStatement != null)
+                    quizStatement.close();
+                if(questionStatement != null)
+                    questionStatement.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
