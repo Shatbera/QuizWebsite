@@ -358,10 +358,10 @@ public class DatabaseManager {
         return quizzes;
     }
 
-    public  List<QuizAttempt> fetchPastResults(int userId, int quizId) {
+    public  List<QuizAttempt> fetchPastResults(int userId, int quizId, String sortField, String sortDirection) {
         List<QuizAttempt> quizAttempts = new ArrayList<>();
         try {
-            ResultSet resultSet = statement.executeQuery(QueryGenerator.fetchPastResults(userId, quizId));
+            ResultSet resultSet = statement.executeQuery(QueryGenerator.fetchPastResults(userId, quizId, sortField, sortDirection));
             while(resultSet.next()) {
                 int score = resultSet.getInt("score");
                 String attemptTime = Utils.formatTimestamp(resultSet.getTimestamp("attemptTime"));

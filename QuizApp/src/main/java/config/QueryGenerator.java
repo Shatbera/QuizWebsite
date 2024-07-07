@@ -107,14 +107,32 @@ public class QueryGenerator {
         return "select * from quizzes order by time_created desc limit 3";
     }
 
-    public static String fetchPastResults(int userId, int quizId) {
-        return String.format("select score as score, attempt_time as attemptTime, time_taken as timeTaken " +
-                             "from (select qa.score, qa.attempt_time, qa.time_taken, row_number() over (order by qa.attempt_time desc) as row_num " +
-                             "from quiz_attempts qa " +
-                             "join quizzes q on qa.quiz_id = q.id " +
-                             "where qa.user_id = %s and qa.quiz_id = %s) as tbl " +
-                             "where row_num > 1 " +
-                             "order by attempt_time desc", userId, quizId);
+    public static String fetchPastResults(int userId, int quizId, String sortField, String sortDirection) {
+        String sql = String.format("select score as score, attempt_time as attemptTime, time_taken as timeTaken " +
+                                      "from (select qa.score, qa.attempt_time, qa.time_taken, row_number() over (order by qa.attempt_time desc) as row_num " +
+                                      "from quiz_attempts qa " +
+                                      "join quizzes q on qa.quiz_id = q.id " +
+                                      "where qa.user_id = %s and qa.quiz_id = %s) as tbl " +
+                                      "where row_num > 1 ", userId, quizId);
+        if (sortField != null && sortDirection != null) {
+            switch (sortField) {
+                case "score":
+                    sql += "order by score " + sortDirection;
+                    break;
+                case "timeTaken":
+                    sql += "order by timeTaken " + sortDirection;
+                    break;
+                case "attemptTime":
+                    sql += "order by attemptTime " + sortDirection;
+                    break;
+                default:
+                    sql += "order by attemptTime desc";
+                    break;
+            }
+        } else {
+            sql += "order by attemptTime desc";
+        }
+        return sql;
     }
 
     public static String createQuiz(int userId, String title, String description, boolean randomize, String displayType, boolean immediateCorrection){

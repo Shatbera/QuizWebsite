@@ -1,6 +1,8 @@
 <%@ page import="config.DatabaseManager" %>
 <%@ page import="models.quizzes.Quiz" %>
 <%@ page import="models.user.User" %>
+<%@ page import="models.quizzes.QuizAttempt" %>
+<%@ page import="java.util.List" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -88,6 +90,36 @@
             font-size: 14px;
             color: #555;
         }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .header-link {
+            color: #ffffff; /* White color for the links */
+            text-decoration: none; /* Remove underline */
+        }
+
+        .header-link:hover {
+            text-decoration: underline; /* Underline on hover */
+        }
     </style>
     <%
         DatabaseManager db = (DatabaseManager) application.getAttribute(DatabaseManager.NAME);
@@ -123,10 +155,64 @@
             </div>
         </a>
     </div>
+    <%
+        String sortField = request.getParameter("sortField") != null ? request.getParameter("sortField") : "original";
+        String sortDirection = request.getParameter("sortDirection") != null ? request.getParameter("sortDirection") : "none";
+
+        List<QuizAttempt> quizAttempts = db.fetchPastResults((int) session.getAttribute("id"), quiz.id, sortField, sortDirection);
+    %>
+
     <div class="section center-text">
         <h2>Your Performance History</h2>
-        <!-- Add user's performance history here -->
+        <%
+            if (quizAttempts != null && !quizAttempts.isEmpty()) {
+        %>
+        <table id="performanceHistory">
+            <thead>
+            <tr>
+                <th>
+                    <a href="?id=<%= id %>&sortField=score&sortDirection=<%= "asc".equals(sortDirection) && "score".equals(sortField) ? "desc" : "asc" %>"
+                       class="header-link">Score <%= "score".equals(sortField) ? ("asc".equals(sortDirection) ? "▲" : "▼") : "" %>
+                    </a></th>
+                <th>
+                    <a href="?id=<%= id %>&sortField=timeTaken&sortDirection=<%= "asc".equals(sortDirection) && "timeTaken".equals(sortField) ? "desc" : "asc" %>"
+                       class="header-link">Time
+                        Taken
+                        (seconds) <%= "timeTaken".equals(sortField) ? ("asc".equals(sortDirection) ? "▲" : "▼") : "" %>
+                    </a></th>
+                <th>
+                    <a href="?id=<%= id %>&sortField=attemptTime&sortDirection=<%= "asc".equals(sortDirection) && "attemptTime".equals(sortField) ? "desc" : "asc" %>"
+                       class="header-link">Attempt
+                        Time <%= "attemptTime".equals(sortField) ? ("asc".equals(sortDirection) ? "▲" : "▼") : "" %>
+                    </a></th>
+            </tr>
+            </thead>
+            <tbody>
+            <%
+                for (QuizAttempt attempt : quizAttempts) {
+            %>
+            <tr>
+                <td><%= attempt.getScore() %>
+                </td>
+                <td><%= attempt.getTimeTaken() %>
+                </td>
+                <td><%= attempt.getAttemptTime() %>
+                </td>
+            </tr>
+            <%
+                }
+            %>
+            </tbody>
+        </table>
+        <%
+        } else {
+        %>
+        <p>No past performance data available.</p>
+        <%
+            }
+        %>
     </div>
+
 
     <div class="section center-text">
         <h2>Top Performers</h2>
