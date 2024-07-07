@@ -1,6 +1,5 @@
 package servlets;
 
-import config.DatabaseManager;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -43,8 +42,8 @@ public class CreateQuizServlet extends HttpServlet {
 
     private Question getQuestion(HttpServletRequest req, HttpServletResponse resp, String questionId) throws ServletException, IOException{
         String questionTypeString = req.getParameter("questionType_" + questionId);
-        String questionText = req.getParameter("questionText_" + questionId);
         Question.QuestionType questionType = stringToQuestionType(questionTypeString);
+        String questionText = req.getParameter("questionText_" + questionId);
         Question question = new Question(-1, stringToQuestionType(questionTypeString), questionText);
         String orderMattersString = req.getParameter("orderMatters_" + questionId);
         boolean orderMatters = orderMattersString == null || Boolean.parseBoolean(orderMattersString);
@@ -81,19 +80,19 @@ public class CreateQuizServlet extends HttpServlet {
 
     private Question.QuestionType stringToQuestionType(String type) {
         switch (type) {
-            case "Question-Response":
+            case "QUESTION_RESPONSE":
                 return Question.QuestionType.QUESTION_RESPONSE;
-            case "Fill in the Blank":
+            case "FILL_IN_BLANK":
                 return Question.QuestionType.FILL_IN_BLANK;
-            case "Multiple Choice":
+            case "MULTI_CHOICE":
                 return Question.QuestionType.MULTI_CHOICE;
-            case "Picture-Response":
+            case "PICTURE_RESPONSE":
                 return Question.QuestionType.PICTURE_RESPONSE;
-            case "Multi-Answer":
+            case "MULTI_ANSWER":
                 return Question.QuestionType.MULTI_ANSWER;
-            case "Multiple Choice (Multiple Answers)":
+            case "MULTI_CHOICE_MULTI_ANSWER":
                 return Question.QuestionType.MULTI_CHOICE_MULTI_ANSWER;
-            case "Matching":
+            case "MATCHING":
                 return Question.QuestionType.MATCHING;
         }
         return Question.QuestionType.QUESTION_RESPONSE;
