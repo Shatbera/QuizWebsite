@@ -187,3 +187,5 @@ INSERT INTO matches (question_id, left_match, right_match) VALUES
 INSERT INTO matches (question_id, left_match, right_match) VALUES
 (15, 'Lion', 'Mammal'),
 (15, 'Fish', 'Vertebrate');
+
+alter table quizzes add column time_created timestamp default current_timestamp;

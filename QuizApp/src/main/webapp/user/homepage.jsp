@@ -243,7 +243,7 @@
     <h2>Popular Quizzes</h2>
     <%
         if (db != null) {
-            List<Quiz> popularQuizzes = db.getTopTwoPopularQuizzes();
+            List<Quiz> popularQuizzes = db.getTopThreePopularQuizzes();
             if (popularQuizzes != null && !popularQuizzes.isEmpty()) {
                 for (Quiz quiz : popularQuizzes) {
     %>
@@ -267,7 +267,28 @@
 
 <div class="section" id="recent-quizzes">
     <h2>Recently Created Quizzes</h2>
-    <!-- there must be subsections -->
+    <%
+        if (db != null) {
+            List<Quiz> recentQuizzes = db.getThreeMostRecentQuizzes();
+            if (recentQuizzes != null && !recentQuizzes.isEmpty()) {
+                for (Quiz quiz : recentQuizzes) {
+    %>
+    <div class="quiz-item">
+        <%@ include file="/quiz/quizDisplay.jsp" %>
+    </div>
+    <%
+        }
+    } else {
+    %>
+    <p>No recent quizzes.</p>
+    <%
+        }
+    } else {
+    %>
+    <p>No quizzes created.</p>
+    <%
+        }
+    %>
 </div>
 
 <div class="section" id="recent-activities">

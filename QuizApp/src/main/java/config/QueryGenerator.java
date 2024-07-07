@@ -100,7 +100,11 @@ public class QueryGenerator {
                "join quiz_attempts qa on q.id = qa.quiz_id " +
                "group by q.id " +
                "order by unique_users desc " +
-               "limit 2";
+               "limit 3";
+    }
+
+    public static String fetchThreeMostRecentQuizzes() {
+        return "select * from quizzes order by time_created desc limit 3";
     }
 
     public static String fetchPastResults(int userId, int quizId) {

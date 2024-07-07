@@ -329,10 +329,24 @@ public class DatabaseManager {
         return quizzes;
     }
 
-    public List<Quiz> getTopTwoPopularQuizzes() {
+    public List<Quiz> getTopThreePopularQuizzes() {
         List<Quiz> quizzes = new ArrayList<>();
         try {
             ResultSet resultSet = statement.executeQuery(QueryGenerator.fetchTopThreePopularQuizzes());
+            while (resultSet.next()) {
+                Quiz quiz = getQuizObject(resultSet);
+                quizzes.add(quiz);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return quizzes;
+    }
+
+    public List<Quiz> getThreeMostRecentQuizzes() {
+        List<Quiz> quizzes = new ArrayList<>();
+        try {
+            ResultSet resultSet = statement.executeQuery(QueryGenerator.fetchThreeMostRecentQuizzes());
             while (resultSet.next()) {
                 Quiz quiz = getQuizObject(resultSet);
                 quizzes.add(quiz);
