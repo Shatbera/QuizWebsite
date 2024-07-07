@@ -22,23 +22,26 @@ public class CreateQuizServlet extends HttpServlet {
         boolean randomize = Boolean.parseBoolean(req.getParameter("randomize"));
         String displayTypeString = req.getParameter("displayType");
         Quiz.DisplayType displayType = displayTypeString.equals("Single-Page") ? Quiz.DisplayType.OnePage : Quiz.DisplayType.MultiplePage;
-        boolean immediateCorrection = Boolean.parseBoolean(req.getParameter("immediateCorrection"));
+        boolean immediateCorrection = displayType == Quiz.DisplayType.MultiplePage && Boolean.parseBoolean(req.getParameter("immediateCorrection"));
         Quiz quiz = new Quiz(-1, userId, title, description, randomize, displayType, immediateCorrection);
 
         String[] questionIds = req.getParameterValues("questionId");
-        ArrayList<Question> questions = new ArrayList<>();
         for(int i = 0; i < questionIds.length; i++){
-            Question question = getQuestion(req, resp, i);
+            System.out.println(questionIds[i]);
+        }
+        /*ArrayList<Question> questions = new ArrayList<>();
+        for(int i = 0; i < questionIds.length; i++){
+            Question question = getQuestion(req, resp, questionIds[i]);
             questions.add(question);
         }
 
         quiz.setQuestions(questions);
 
         DatabaseManager db = (DatabaseManager) req.getServletContext().getAttribute(DatabaseManager.NAME);
-        db.saveQuiz(quiz);
+        db.saveQuiz(quiz);*/
     }
 
-    private Question getQuestion(HttpServletRequest req, HttpServletResponse resp, int questionId) throws ServletException, IOException{
+    private Question getQuestion(HttpServletRequest req, HttpServletResponse resp, String questionId) throws ServletException, IOException{
         String questionTypeString = req.getParameter("questionType_" + questionId);
         String questionText = req.getParameter("questionText_" + questionId);
         Question.QuestionType questionType = stringToQuestionType(questionTypeString);
@@ -53,7 +56,7 @@ public class CreateQuizServlet extends HttpServlet {
         return question;
     }
 
-    private void handleMatchingAnswers(HttpServletRequest req, HttpServletResponse resp, Question question, int questionId) throws ServletException, IOException {
+    private void handleMatchingAnswers(HttpServletRequest req, HttpServletResponse resp, Question question, String questionId) throws ServletException, IOException {
         String[] leftMatches = req.getParameterValues("leftMatch_"+questionId);
         String[] rightMatches = req.getParameterValues("rightMatch_"+questionId);
         ArrayList<MatchingAnswer> matchingAnswers = new ArrayList<>();
@@ -64,7 +67,7 @@ public class CreateQuizServlet extends HttpServlet {
         question.setMatchingAnswers(matchingAnswers);
     }
 
-    private void handleAnswers(HttpServletRequest req, HttpServletResponse resp, Question question, int questionId, boolean orderMatters) throws ServletException, IOException {
+    private void handleAnswers(HttpServletRequest req, HttpServletResponse resp, Question question, String questionId, boolean orderMatters) throws ServletException, IOException {
         String[] answers = req.getParameterValues("answer_"+questionId);
         String[] isCorrectAnswers = req.getParameterValues("isCorrect_"+questionId);
         ArrayList<Answer> answersList = new ArrayList<>();
