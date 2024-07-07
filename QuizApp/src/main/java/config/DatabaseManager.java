@@ -73,10 +73,10 @@ public class DatabaseManager {
         int id = rs.getInt("id");
         String questionText = rs.getString("question_text");
         String questionType = rs.getString("question_type");
-        return new Question(id, getQuestionType(questionType), questionText);
+        return new Question(id, stringToQuestionType(questionType), questionText);
     }
 
-    private Question.QuestionType getQuestionType(String type) {
+    private Question.QuestionType stringToQuestionType(String type) {
         switch (type) {
             case "question_response":
                 return Question.QuestionType.QUESTION_RESPONSE;
@@ -357,5 +357,50 @@ public class DatabaseManager {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void createQuiz(Quiz quiz) {
+        String displayType = quiz.displayType == Quiz.DisplayType.OnePage ? "one_page" : "multiple_page";
+        try {
+            statement.executeQuery(QueryGenerator.createQuiz(quiz.userId, quiz.title, quiz.description, quiz.randomize, displayType, quiz.immediateCorrection));
+            for(Question question : quiz.getQuestions()) {
+                statement.executeQuery(QueryGenerator.createQuestion(quiz.id, questionTypeToString(question.questionType), question.questionText));
+                if(question.questionType == Question.QuestionType.MATCHING){
+                    for(MatchingAnswer matchingAnswer : question.getMatchingAnswers()){
+                        statement.executeQuery(QueryGenerator.createMatchingAnswer(question.id, matchingAnswer.leftMatch, matchingAnswer.rightMatch));
+                    }
+                }else{
+                    for(Answer answer : question.getAnswers()) {
+                        statement.executeQuery(QueryGenerator.createAnswer(question.id, answer.toString(), answer.isCorrect, answer.order));
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String questionTypeToString(Question.QuestionType type) {
+        if(type == Question.QuestionType.QUESTION_RESPONSE){
+            return "question_response";
+        }else if(type == Question.QuestionType.FILL_IN_BLANK){
+            return "fill_in_blank";
+        }
+        else if(type == Question.QuestionType.MULTI_CHOICE){
+            return "multi_choice";
+        }
+        else if(type == Question.QuestionType.PICTURE_RESPONSE){
+            return "picture_response";
+        }
+        else if(type == Question.QuestionType.MULTI_ANSWER){
+            return "multi_answer";
+        }
+        else if(type == Question.QuestionType.MULTI_CHOICE_MULTI_ANSWER){
+            return "multi_choice_multi_answer";
+        }
+        else if(type == Question.QuestionType.MATCHING){
+            return "matching";
+        }
+        return "question_response";
     }
 }

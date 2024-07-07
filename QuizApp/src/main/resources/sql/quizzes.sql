@@ -15,7 +15,8 @@ CREATE TABLE quizzes (
     description VARCHAR(1000) NOT NULL,
     randomize BOOL DEFAULT FALSE,
     display_type ENUM ('one_page', 'multiple_page'),
-    immediate_correction BOOL DEFAULT FALSE
+    immediate_correction BOOL DEFAULT FALSE,
+    date_created timestamp default current_timestamp
 );
 
 -- Create questions table

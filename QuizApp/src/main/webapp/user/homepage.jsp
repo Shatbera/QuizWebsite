@@ -210,6 +210,9 @@
 </div>
 
 <div class="section" id="all-quizzes">
+    <form action="../quiz/createQuizPage.jsp">
+        <input type="submit" value="Create Quiz">
+    </form>
     <h2>All Quizzes</h2>
     <%
         DatabaseManager db = (DatabaseManager) application.getAttribute(DatabaseManager.NAME);

@@ -112,4 +112,24 @@ public class QueryGenerator {
                              "where row_num > 1 " +
                              "order by attempt_time desc", userId, quizId);
     }
+
+    public static String createQuiz(int userId, String title, String description, boolean randomize, String displayType, boolean immediateCorrection){
+        return String.format("INSERT INTO quizzes (user_id, title, description, randomize, display_type, immediate_correction) VALUES (%s, %s, %s, %s, %s, %s)",
+                userId, title, description, randomize, displayType, immediateCorrection);
+    }
+
+    public static String createQuestion(int quizId, String questionType, String questionText){
+        return String.format("INSERT INTO questions (quiz_id, question_type, question_text) VALUES (%s, %s, %s)",
+                quizId, questionType, questionText);
+    }
+
+    public static String createAnswer(int questionId, String answer, boolean isCorrect, int answerOrder){
+        return String.format("INSERT INTO answers (question_id, answer, is_correct, answer_order) VALUES (%s, %s, %s, %s)",
+                questionId, answer, isCorrect, answerOrder);
+    }
+
+    public static String createMatchingAnswer(int questionId, String leftMatch, String rightMatch){
+        return String.format("INSERT INTO matches (question_id, left_match, right_match) VALUES (%s, %s, %s)",
+                questionId, leftMatch, rightMatch);
+    }
 }
