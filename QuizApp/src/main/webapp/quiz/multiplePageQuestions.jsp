@@ -1,6 +1,7 @@
 <%@ page import="models.quizzes.Quiz" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="models.quizzes.Question" %>
+<%@ page import="config.DatabaseManager" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -45,7 +46,11 @@
             Quiz quiz = (Quiz) session.getAttribute("currentQuiz");
             Question question = quiz.getNextQuestion();
             if(question == null) {
-                quiz.endQuiz();
+                if(!quiz.isQuizEnded()){
+                    quiz.endQuiz();
+                    DatabaseManager db = (DatabaseManager) application.getAttribute(DatabaseManager.NAME);
+                    db.saveQuizAttempt((int) session.getAttribute("id"), quiz);
+                }
                 response.sendRedirect("resultpage.jsp");
             }else{
 

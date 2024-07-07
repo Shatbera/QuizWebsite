@@ -81,15 +81,9 @@
         int maxScore = quiz.getMaxScore();
         int percentage = quiz.getScorePercentage();
         int timeTaken = quiz.getQuizTimeTaken();
-        session.removeAttribute("currentQuiz");
     %>
 </head>
 <body>
-<%
-    // Save quiz attempt to the database
-    DatabaseManager db = (DatabaseManager) application.getAttribute(DatabaseManager.NAME);
-    db.saveQuizAttempt((int) session.getAttribute("id"), quiz);
-%>
 <div class="container">
     <h1>Quiz Results</h1>
 
@@ -118,6 +112,7 @@
     <div>
         <h2>Comparison with Your Past Performance</h2>
         <%
+            DatabaseManager db = (DatabaseManager) application.getAttribute(DatabaseManager.NAME);
             List<QuizAttempt> quizAttempts = db.fetchPastResults((int) session.getAttribute("id"), quiz.id);
             if (quizAttempts != null && !quizAttempts.isEmpty()) {
         %>

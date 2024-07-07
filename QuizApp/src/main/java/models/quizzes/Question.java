@@ -90,6 +90,11 @@ public class Question {
     }
 
     public int submitAnswer(String selectedAnswer){
+        if(selectedAnswer == null){
+            submittedAnswer = new Answer("No Answer", false);
+            submitted = true;
+            return 0;
+        }
         score = 0;
         for(Answer answer : answers){
             if(answer.isCorrect && answer.toString().equalsIgnoreCase(selectedAnswer)){
@@ -103,6 +108,12 @@ public class Question {
     }
 
     public int submitMultipleAnswers(ArrayList<String> selectedAnswers){
+        if(selectedAnswers == null){
+            submittedAnswers = new ArrayList<>();
+            submittedAnswers.add(new Answer("No Answers", false));
+            submitted = true;
+            return 0;
+        }
         score = 0;
         submittedAnswers = new ArrayList<>();
         if(questionType == QuestionType.MULTI_ANSWER){

@@ -63,6 +63,10 @@ public class Quiz {
         quizEnded = true;
     }
 
+    public boolean isQuizEnded(){
+        return quizEnded;
+    }
+
     public int getQuizTimeTaken(){
         return quizTimeTaken;
     }

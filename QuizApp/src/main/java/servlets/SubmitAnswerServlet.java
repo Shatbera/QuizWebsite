@@ -1,5 +1,6 @@
 package servlets;
 
+import config.DatabaseManager;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -47,7 +48,11 @@ public class SubmitAnswerServlet extends HttpServlet {
             Question question = currentQuiz.getQuestion(id);
             submitQuestion(req, resp, question);
         }
-        currentQuiz.endQuiz();
+        if(!currentQuiz.isQuizEnded()){
+            currentQuiz.endQuiz();
+            DatabaseManager db = (DatabaseManager) req.getServletContext().getAttribute(DatabaseManager.NAME);
+            db.saveQuizAttempt((int) req.getSession().getAttribute("id"), currentQuiz);
+        }
         req.getRequestDispatcher("resultpage.jsp").forward(req, resp);
     }
 
@@ -105,6 +110,8 @@ public class SubmitAnswerServlet extends HttpServlet {
         if (selectedAnswers != null) {
             ArrayList<String> selectedAnswersList = new ArrayList<>(Arrays.asList(selectedAnswers));
             question.submitMultipleAnswers(selectedAnswersList);
+        }else{
+            question.submitMultipleAnswers(null);
         }
     }
 }
