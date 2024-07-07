@@ -457,4 +457,19 @@ public class DatabaseManager {
         }
         return "question_response";
     }
+
+    public User getQuizCreator(int id) {
+        try {
+            ResultSet resultSet = statement.executeQuery(QueryGenerator.getQuizCreator(id));
+            if(resultSet.next()) {
+                int userId = resultSet.getInt("id");
+                String username = resultSet.getString("username");
+                String email = resultSet.getString("email");
+                return new User(userId, username, email);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
 }

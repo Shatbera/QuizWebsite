@@ -1,6 +1,7 @@
 <%@ page import="config.DatabaseManager" %>
 <%@ page import="models.quizzes.Quiz" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="models.user.User" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,6 +15,7 @@
             box-sizing: border-box;
             text-align: center;
         }
+
         .container {
             background-color: #ffffff;
             padding: 20px;
@@ -22,21 +24,27 @@
             max-width: 800px;
             margin: 0 auto;
         }
+
         h1, h2, h3 {
             color: #333;
         }
+
         h1 {
             margin-bottom: 20px;
         }
+
         h2 {
             margin-bottom: 15px;
         }
+
         h3 {
             margin-bottom: 10px;
         }
+
         .section {
             margin-bottom: 20px;
         }
+
         .button {
             display: block;
             width: 200px;
@@ -50,11 +58,35 @@
             cursor: pointer;
             text-align: center;
         }
+
         .button:hover {
             background-color: #0056b3;
         }
+
         .center-text {
             text-align: center;
+        }
+
+        .user-info {
+            display: inline-block;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            margin: 10px 0;
+        }
+
+        .user-info .username {
+            display: block;
+            font-size: 18px;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .user-info .email {
+            display: block;
+            font-size: 14px;
+            color: #555;
         }
     </style>
     <%
@@ -68,15 +100,29 @@
     <h1>Quiz Summary</h1>
 
     <div class="section center-text">
-        <h2><%= quiz.title %></h2>
-        <h3><%= quiz.description %></h3>
+        <h2><%= quiz.title %>
+        </h2>
+        <h3><%= quiz.description %>
+        </h3>
     </div>
 
     <div class="section center-text">
         <h2>Quiz Creator</h2>
-        <!-- Add details about the quiz creator here -->
+        <%
+            User user = db.getQuizCreator(quiz.id);
+            int currentUserId = (int) session.getAttribute("id");
+            if (user.getId() != currentUserId) {
+        %>
+        <a href="../user/userProfile?username=<%= user.getUsername() %>" class="user-item">
+            <%
+                }
+            %>
+            <div class="user-info">
+                <span class="username"><%= user.getId() == currentUserId ? user.getUsername().concat(" (You)") : user.getUsername() %></span>
+                <span class="email"><%= user.getEmail() %></span>
+            </div>
+        </a>
     </div>
-
     <div class="section center-text">
         <h2>Your Performance History</h2>
         <!-- Add user's performance history here -->

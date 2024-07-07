@@ -153,4 +153,8 @@ public class QueryGenerator {
                              "order by attemptTime desc " +
                              "limit 3", userId);
     }
+
+    public static String getQuizCreator(int id) {
+        return String.format("select u.id as id, u.username as username, u.email as email from users u join quizzes q on q.user_id = u.id where q.id = %s", id);
+    }
 }
