@@ -52,6 +52,10 @@
         <servlet-name>SendMessageServlet</servlet-name>
         <servlet-class>servlets.SendMessageServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CreateQuizServlet</servlet-name>
+        <servlet-class>servlets.CreateQuizServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/user/registerServlet</url-pattern>
@@ -99,5 +103,9 @@
     <servlet-mapping>
         <servlet-name>SendMessageServlet</servlet-name>
         <url-pattern>/user/sendMessage</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateQuizServlet</servlet-name>
+        <url-pattern>/quiz/createQuiz</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -359,7 +359,7 @@ public class DatabaseManager {
         }
     }
 
-    public void createQuiz(Quiz quiz) {
+    public void saveQuiz(Quiz quiz) {
         String displayType = quiz.displayType == Quiz.DisplayType.OnePage ? "one_page" : "multiple_page";
         try {
             statement.executeQuery(QueryGenerator.createQuiz(quiz.userId, quiz.title, quiz.description, quiz.randomize, displayType, quiz.immediateCorrection));
