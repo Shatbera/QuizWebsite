@@ -136,4 +136,21 @@ public class QueryGenerator {
         return String.format("INSERT INTO matches (question_id, left_match, right_match) VALUES (%s, %s, %s)",
                 questionId, leftMatch, rightMatch);
     }
+
+    public static String fetchUserRecentActivity(int userId) {
+        return String.format("with rankedAttempts as (select qa.time_taken as timeTaken, " +
+                             "qa.score as score, " +
+                             "q.title as title, " +
+                             "q.description as description, " +
+                             "qa.attempt_time as attemptTime, " +
+                             "row_number() over (partition by qa.quiz_id order by qa.attempt_time desc) as rn " +
+                             "from quiz_attempts qa " +
+                             "join quizzes q on qa.quiz_id = q.id " +
+                             "where qa.user_id = %s) " +
+                             "select * " +
+                             "from rankedAttempts " +
+                             "where rn = 1 " +
+                             "order by attemptTime desc " +
+                             "limit 3", userId);
+    }
 }

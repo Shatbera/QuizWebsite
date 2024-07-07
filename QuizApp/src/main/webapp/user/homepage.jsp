@@ -6,6 +6,7 @@
 <%@ page import="models.user.FriendMessage" %>
 <%@ page import="models.user.Message" %>
 <%@ page import="java.util.List" %>
+<%@ page import="models.quizzes.UserQuizRecentAttemptShort" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -185,6 +186,44 @@
             font-size: 0.8em;
             color: #6c757d;
         }
+        #recent-activities {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #recent-activities h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-attempt {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .quiz-attempt h3 {
+            color: #007bff;
+            font-size: 20px;
+            margin-top: 0;
+        }
+
+        .quiz-attempt p {
+            color: #555;
+            font-size: 16px;
+            margin: 5px 0;
+        }
+
+        .quiz-attempt p strong {
+            color: #333;
+        }
+
     </style>
 </head>
 <body>
@@ -293,7 +332,28 @@
 
 <div class="section" id="recent-activities">
     <h2>Your Recent Activities</h2>
-    <!-- there must be subsections -->
+    <%
+        if (db != null) {
+            List<UserQuizRecentAttemptShort> myRecentAttempts = db.getRecentAttempts((int) session.getAttribute("id"));
+            if (myRecentAttempts != null && !myRecentAttempts.isEmpty()) {
+                for (UserQuizRecentAttemptShort quiz : myRecentAttempts) {
+    %>
+    <div class="quiz-attempt">
+        <h3><%= quiz.getTitle() %></h3>
+        <p><strong>Description:</strong> <%= quiz.getDescription() %></p>
+        <p><strong>Score:</strong> <%= quiz.getScore() %></p>
+        <p><strong>Time Taken:</strong> <%= quiz.getTimeTaken() %> seconds</p>
+        <p><strong>Attempt Time:</strong> <%= quiz.getAttemptTime() %></p>
+    </div>
+    <%
+        }
+    } else {
+    %>
+    <p>No recent activities found.</p>
+    <%
+            }
+        }
+    %>
 </div>
 
 <div class="section" id="created-quizzes">

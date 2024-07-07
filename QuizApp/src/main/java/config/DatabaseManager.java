@@ -373,6 +373,24 @@ public class DatabaseManager {
         }
     }
 
+    public List<UserQuizRecentAttemptShort> getRecentAttempts(int userId) {
+        List<UserQuizRecentAttemptShort> recentAttempts = new ArrayList<>();
+        try {
+            ResultSet resultSet = statement.executeQuery(QueryGenerator.fetchUserRecentActivity(userId));
+            while (resultSet.next()) {
+                int score = resultSet.getInt("score");
+                String title = resultSet.getString("title");
+                String description = resultSet.getString("description");
+                int timeTaken = resultSet.getInt("timeTaken");
+                Timestamp attemptTime = resultSet.getTimestamp("attemptTime");
+                recentAttempts.add(new UserQuizRecentAttemptShort(timeTaken, score, description, title, Utils.formatTimestamp(attemptTime)));
+            }
+            return recentAttempts;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void saveQuiz(Quiz quiz) {
         String displayType = quiz.displayType == Quiz.DisplayType.OnePage ? "one_page" : "multiple_page";
         try {
