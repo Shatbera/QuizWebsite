@@ -175,4 +175,23 @@ public class QueryGenerator {
     public static String getQuizCreator(int id) {
         return String.format("select u.id as id, u.username as username, u.email as email from users u join quizzes q on q.user_id = u.id where q.id = %s", id);
     }
+
+    public static String fetchQuizPerformers(int id, boolean allTime) {
+        return String.format("select ranked.id as id, ranked.username as username, ranked.email as email, ranked.time_taken as timeTaken, ranked.score as score " +
+                     "from (select u.id, " +
+                     "u.username," +
+                     "u.email," +
+                     "qa.time_taken, " +
+                     "qa.score, " +
+                     "row_number() over (partition by u.id order by qa.score desc, qa.time_taken) as rn " +
+                     "from users u " +
+                     "join quiz_attempts qa on u.id = qa.user_id " +
+                     "join quizzes q on qa.quiz_id = q.id " +
+                     "where q.id = %s" +
+                     (!allTime? "%s" : "") +
+                     ") as ranked " +
+                     "where rn = 1 " +
+                     "order by score desc, timeTaken " +
+                     "limit 3", id, " and date(qa.attempt_time) = current_date()");
+    }
 }

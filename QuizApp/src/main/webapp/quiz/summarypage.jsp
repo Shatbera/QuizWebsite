@@ -3,6 +3,7 @@
 <%@ page import="models.user.User" %>
 <%@ page import="models.quizzes.QuizAttempt" %>
 <%@ page import="java.util.List" %>
+<%@ page import="models.quizzes.QuizPerformerResponse" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -120,6 +121,28 @@
         .header-link:hover {
             text-decoration: underline; /* Underline on hover */
         }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .user-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .user-table th, .user-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .user-table th {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
     </style>
     <%
         DatabaseManager db = (DatabaseManager) application.getAttribute(DatabaseManager.NAME);
@@ -213,13 +236,76 @@
         %>
     </div>
 
-
     <div class="section center-text">
         <h2>Top Performers</h2>
         <h3>All Time</h3>
-        <!-- Add details about all-time top performers here -->
+        <%
+            List<QuizPerformerResponse> quizPerformers = db.fetchQuizPerformers(quiz.id, true);
+            if (quizPerformers != null && !quizPerformers.isEmpty()) {
+        %>
+        <div class="table-responsive">
+            <table class="user-table">
+                <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Score</th>
+                    <th>Time Taken</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% for (QuizPerformerResponse performer : quizPerformers) { %>
+                <tr>
+                    <td><%= performer.getUsername() %>
+                    </td>
+                    <td><%= performer.getEmail() %>
+                    </td>
+                    <td><%= performer.getScore() %>
+                    </td>
+                    <td><%= performer.getTimeTaken() %>
+                    </td>
+                </tr>
+                <% } %>
+                </tbody>
+            </table>
+        </div>
+        <% } else { %>
+        <p>No users found.</p>
+        <% } %>
         <h3>Last Day</h3>
-        <!-- Add details about last day's top performers here -->
+        <%
+            List<QuizPerformerResponse> topQuizPerformersLastDay = db.fetchQuizPerformers(quiz.id, false);
+            if (topQuizPerformersLastDay != null && !topQuizPerformersLastDay.isEmpty()) {
+        %>
+        <div class="table-responsive">
+            <table class="user-table">
+                <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Score</th>
+                    <th>Time Taken</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% for (QuizPerformerResponse performer : topQuizPerformersLastDay) { %>
+                <tr>
+                    <td><%= performer.getUsername() %>
+                    </td>
+                    <td><%= performer.getEmail() %>
+                    </td>
+                    <td><%= performer.getScore() %>
+                    </td>
+                    <td><%= performer.getTimeTaken() %>
+                    </td>
+                </tr>
+                <% } %>
+                </tbody>
+            </table>
+        </div>
+        <% } else { %>
+        <p>No users found.</p>
+        <% } %>
     </div>
 
     <div class="section center-text">
