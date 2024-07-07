@@ -113,7 +113,7 @@ public class QueryGenerator {
                                       "from quiz_attempts qa " +
                                       "join quizzes q on qa.quiz_id = q.id " +
                                       "where qa.user_id = %s and qa.quiz_id = %s) as tbl " +
-                                      "where row_num > 1 ", userId, quizId);
+                                      "where row_num >= 1 ", userId, quizId);
         if (sortField != null && sortDirection != null) {
             switch (sortField) {
                 case "score":

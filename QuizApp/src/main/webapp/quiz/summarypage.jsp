@@ -318,10 +318,6 @@
         <!-- Add summary statistics here -->
     </div>
 
-    <div class="section center-text">
-        <h2>Quiz Actions</h2>
-        <!-- Add any quiz-related actions here -->
-    </div>
 
     <div class="section center-text">
         <form action="StartQuizServlet" method="post">

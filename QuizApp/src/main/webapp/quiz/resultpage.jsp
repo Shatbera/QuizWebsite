@@ -113,7 +113,7 @@
         <h2>Comparison with Your Past Performance</h2>
         <%
             DatabaseManager db = (DatabaseManager) application.getAttribute(DatabaseManager.NAME);
-            List<QuizAttempt> quizAttempts = db.fetchPastResults((int) session.getAttribute("id"), quiz.id);
+            List<QuizAttempt> quizAttempts = db.fetchPastResults((int) session.getAttribute("id"), quiz.id, "attemptTime", "desc");
             if (quizAttempts != null && !quizAttempts.isEmpty()) {
         %>
         <table>
