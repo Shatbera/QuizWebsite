@@ -37,6 +37,36 @@
             right: 10px;
         }
 
+        .logout-button input[type="submit"] {
+            background-color: #dc3545;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .logout-button input[type="submit"]:hover {
+            background-color: #c82333;
+        }
+
+        .create-quiz-button input[type="submit"] {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .create-quiz-button input[type="submit"]:hover {
+            background-color: #218838;
+        }
+
         /* Styling for search form */
         .search-form {
             margin-top: 20px;
@@ -186,6 +216,7 @@
             font-size: 0.8em;
             color: #6c757d;
         }
+
         #recent-activities {
             background-color: #f9f9f9;
             padding: 20px;
@@ -249,7 +280,7 @@
 </div>
 
 <div class="section" id="all-quizzes">
-    <form action="../quiz/createQuizPage.jsp">
+    <form action="../quiz/createQuizPage.jsp" class="create-quiz-button">
         <input type="submit" value="Create Quiz">
     </form>
     <h2>All Quizzes</h2>
@@ -339,11 +370,15 @@
                 for (UserQuizRecentAttemptShort quiz : myRecentAttempts) {
     %>
     <div class="quiz-attempt">
-        <h3><%= quiz.getTitle() %></h3>
-        <p><strong>Description:</strong> <%= quiz.getDescription() %></p>
-        <p><strong>Score:</strong> <%= quiz.getScore() %></p>
+        <h3><%= quiz.getTitle() %>
+        </h3>
+        <p><strong>Description:</strong> <%= quiz.getDescription() %>
+        </p>
+        <p><strong>Score:</strong> <%= quiz.getScore() %>
+        </p>
         <p><strong>Time Taken:</strong> <%= quiz.getTimeTaken() %> seconds</p>
-        <p><strong>Attempt Time:</strong> <%= quiz.getAttemptTime() %></p>
+        <p><strong>Attempt Time:</strong> <%= quiz.getAttemptTime() %>
+        </p>
     </div>
     <%
         }

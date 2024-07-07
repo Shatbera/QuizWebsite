@@ -53,7 +53,24 @@
 
         .email {
             color: #666;
-        }    </style>
+        }
+
+        .button {
+            display: inline-block;
+            background: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background: #0056b3;
+        }
+    </style>
 </head>
 <body>
 <%
@@ -95,6 +112,8 @@
         }
     %>
 </div>
+
+<a href="homepage.jsp" class="button">Back to Home Page</a>
 
 </body>
 </html>
