@@ -63,11 +63,26 @@
         function validatePasswords() {
             const password = document.getElementById('password').value;
             const repeatPassword = document.getElementById('repeatPassword').value;
+
+            if (password.length < 8) {
+                alert('Password must be at least 8 characters long!');
+                return false;
+            }
             if (password !== repeatPassword) {
                 alert('Passwords do not match!');
                 return false;
             }
             return true;
+        }
+
+        function checkPasswordLength() {
+            const password = document.getElementById('password').value;
+            const message = document.getElementById('passwordLengthMessage');
+            if (password.length < 8) {
+                message.textContent = 'Password must be at least 8 characters long!';
+            } else {
+                message.textContent = '';
+            }
         }
     </script>
 </head>
@@ -75,8 +90,7 @@
 <div class="registration-form">
     <h2>Register</h2>
     <% if (request.getAttribute("message") != null) { %>
-    <div class="message"><%= request.getAttribute("message") %>
-    </div>
+    <div class="message"><%= request.getAttribute("message") %></div>
     <% } %>
     <form action="registerServlet" method="post" onsubmit="return validatePasswords()">
         <div class="form-group">
@@ -89,7 +103,8 @@
         </div>
         <div class="form-group">
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+            <input type="password" id="password" name="password" required oninput="checkPasswordLength()">
+            <div id="passwordLengthMessage" class="message"></div>
         </div>
         <div class="form-group">
             <label for="repeatPassword">Repeat Password:</label>

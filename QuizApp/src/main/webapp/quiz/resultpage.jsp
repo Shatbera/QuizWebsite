@@ -152,6 +152,67 @@
 
     <div>
         <h2>Comparison with Your Friends</h2>
+        <%
+            List<FriendQuizAttempt> friendsQuizAttempts = db.fetchFriendsQuizAttempts(quiz.id, (int) session.getAttribute("id"));
+            if (friendsQuizAttempts != null && !friendsQuizAttempts.isEmpty()) {
+        %>
+        <table>
+            <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Attempts</th>
+            </tr>
+            </thead>
+            <tbody>
+            <%
+                for (FriendQuizAttempt friendAttempt : friendsQuizAttempts) {
+            %>
+            <tr>
+                <td><%= friendAttempt.getUsername() %>
+                </td>
+                <td><%= friendAttempt.getEmail() %>
+                </td>
+                <td>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Score</th>
+                            <th>Time Taken</th>
+                            <th>Attempt Time</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <%
+                            for (QuizAttempt attempt : friendAttempt.getQuizAttemptList()) {
+                        %>
+                        <tr>
+                            <td><%= attempt.getScore() %>
+                            </td>
+                            <td><%= attempt.getTimeTaken() %>
+                            </td>
+                            <td><%= attempt.getAttemptTime() %>
+                            </td>
+                        </tr>
+                        <%
+                            }
+                        %>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <%
+                }
+            %>
+            </tbody>
+        </table>
+        <%
+        } else {
+        %>
+        <p>No friends have taken this quiz yet.</p>
+        <%
+            }
+        %>
     </div>
 
     <a href="../user/homepage.jsp" class="button">Back to Home Page</a>

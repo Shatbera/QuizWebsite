@@ -514,7 +514,7 @@
 
                     // Optionally, redirect back to homepage after action
                     // window.location.href = 'userDashboard.jsp';
-
+                    window.location.href = '../user/homepage.jsp';
                     alert(action === 'accept' ? 'Friend request accepted!' : 'Friend request declined.');
                 } else {
                     alert('Failed to ' + action + ' friend request. Please try again.');

@@ -213,7 +213,19 @@ public class QueryGenerator {
     public static String getQuizStatistics(int id) {
         return String.format("select avg(qa.score) as avg_score, avg(qa.time_taken) as avg_time_taken, count(qa.id) as total_attempts, q.max_score as max_score " +
                              "from quizzes q " +
-                             "join quiz_attempts qa on q.id = qa.quiz_id " +
+                             "left join quiz_attempts qa on q.id = qa.quiz_id " +
                              "where q.id = %s ", id);
+    }
+
+    public static String fetchFriendsQuizAttempts(int userId, int quizId) {
+        return String.format("select u.id as userId, u.username as username, u.email as email, qa.time_taken as time_taken, qa.score as score, qa.attempt_time as attempt_time " +
+                             "from quiz_attempts qa " +
+                             "join users u on qa.user_id = u.id " +
+                             "where qa.quiz_id = %s " +
+                             "and qa.user_id in (select innerU.id " +
+                             "from users innerU " +
+                             "join friends f on ((innerU.id = f.receiver_id and f.sender_id = %s) or " +
+                             "(innerU.id = f.sender_id and f.receiver_id = %s))) " +
+                             "order by u.id, qa.attempt_time desc", quizId, userId, userId);
     }
 }

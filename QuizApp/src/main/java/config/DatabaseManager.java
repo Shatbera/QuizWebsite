@@ -6,9 +6,7 @@ import models.user.*;
 import util.Utils;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class DatabaseManager {
 
@@ -358,11 +356,11 @@ public class DatabaseManager {
         return quizzes;
     }
 
-    public  List<QuizAttempt> fetchPastResults(int userId, int quizId, String sortField, String sortDirection) {
+    public List<QuizAttempt> fetchPastResults(int userId, int quizId, String sortField, String sortDirection) {
         List<QuizAttempt> quizAttempts = new ArrayList<>();
         try {
             ResultSet resultSet = statement.executeQuery(QueryGenerator.fetchPastResults(userId, quizId, sortField, sortDirection));
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 int score = resultSet.getInt("score");
                 String attemptTime = Utils.formatTimestamp(resultSet.getTimestamp("attemptTime"));
                 int timeTaken = resultSet.getInt("timeTaken");
@@ -396,25 +394,25 @@ public class DatabaseManager {
         String displayType = quiz.displayType == Quiz.DisplayType.OnePage ? "one_page" : "multiple_page";
         PreparedStatement quizStatement = null;
         PreparedStatement questionStatement = null;
-        int maxScore = quiz.getQuestions().stream().mapToInt(Question::getScore).sum();
+        int maxScore = quiz.getQuestions().stream().mapToInt(Question::getMaxScore).sum();
         try {
             quizStatement = connection.prepareStatement(QueryGenerator.createQuiz(quiz.userId, quiz.title, quiz.description, quiz.randomize, displayType, quiz.immediateCorrection, maxScore), Statement.RETURN_GENERATED_KEYS);
             quizStatement.executeUpdate();
             ResultSet quizRs = quizStatement.getGeneratedKeys();
             if (quizRs.next()) {
                 int quizId = quizRs.getInt(1);
-                for(Question question : quiz.getQuestions()) {
+                for (Question question : quiz.getQuestions()) {
                     questionStatement = connection.prepareStatement(QueryGenerator.createQuestion(quizId, questionTypeToString(question.questionType), question.questionText), Statement.RETURN_GENERATED_KEYS);
                     questionStatement.executeUpdate();
                     ResultSet questionRs = questionStatement.getGeneratedKeys();
                     if (questionRs.next()) {
                         int questionId = questionRs.getInt(1);
-                        if(question.questionType == Question.QuestionType.MATCHING){
-                            for(MatchingAnswer matchingAnswer : question.getMatchingAnswers()){
+                        if (question.questionType == Question.QuestionType.MATCHING) {
+                            for (MatchingAnswer matchingAnswer : question.getMatchingAnswers()) {
                                 statement.executeUpdate(QueryGenerator.createMatchingAnswer(questionId, matchingAnswer.leftMatch, matchingAnswer.rightMatch));
                             }
-                        }else{
-                            for(Answer answer : question.getAnswers()) {
+                        } else {
+                            for (Answer answer : question.getAnswers()) {
                                 statement.executeUpdate(QueryGenerator.createAnswer(questionId, answer.toString(), answer.isCorrect, answer.order));
                             }
                         }
@@ -423,11 +421,11 @@ public class DatabaseManager {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }finally {
+        } finally {
             try {
-                if(quizStatement != null)
+                if (quizStatement != null)
                     quizStatement.close();
-                if(questionStatement != null)
+                if (questionStatement != null)
                     questionStatement.close();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -436,24 +434,19 @@ public class DatabaseManager {
     }
 
     private String questionTypeToString(Question.QuestionType type) {
-        if(type == Question.QuestionType.QUESTION_RESPONSE){
+        if (type == Question.QuestionType.QUESTION_RESPONSE) {
             return "question_response";
-        }else if(type == Question.QuestionType.FILL_IN_BLANK){
+        } else if (type == Question.QuestionType.FILL_IN_BLANK) {
             return "fill_in_blank";
-        }
-        else if(type == Question.QuestionType.MULTI_CHOICE){
+        } else if (type == Question.QuestionType.MULTI_CHOICE) {
             return "multi_choice";
-        }
-        else if(type == Question.QuestionType.PICTURE_RESPONSE){
+        } else if (type == Question.QuestionType.PICTURE_RESPONSE) {
             return "picture_response";
-        }
-        else if(type == Question.QuestionType.MULTI_ANSWER){
+        } else if (type == Question.QuestionType.MULTI_ANSWER) {
             return "multi_answer";
-        }
-        else if(type == Question.QuestionType.MULTI_CHOICE_MULTI_ANSWER){
+        } else if (type == Question.QuestionType.MULTI_CHOICE_MULTI_ANSWER) {
             return "multi_choice_multi_answer";
-        }
-        else if(type == Question.QuestionType.MATCHING){
+        } else if (type == Question.QuestionType.MATCHING) {
             return "matching";
         }
         return "question_response";
@@ -462,7 +455,7 @@ public class DatabaseManager {
     public User getQuizCreator(int id) {
         try {
             ResultSet resultSet = statement.executeQuery(QueryGenerator.getQuizCreator(id));
-            if(resultSet.next()) {
+            if (resultSet.next()) {
                 int userId = resultSet.getInt("id");
                 String username = resultSet.getString("username");
                 String email = resultSet.getString("email");
@@ -510,10 +503,11 @@ public class DatabaseManager {
             throw new RuntimeException(e);
         }
     }
+
     public QuizStatistics getQuizStatistics(int id) {
         try {
             ResultSet resultSet = statement.executeQuery(QueryGenerator.getQuizStatistics(id));
-            if(resultSet.next()) {
+            if (resultSet.next()) {
                 double avgScore = resultSet.getDouble("avg_score");
                 double avgTimeTaken = resultSet.getDouble("avg_time_taken");
                 int totalAttempts = resultSet.getInt("total_attempts");
@@ -524,5 +518,36 @@ public class DatabaseManager {
             throw new RuntimeException(e);
         }
         return null;
+    }
+
+    public List<FriendQuizAttempt> fetchFriendsQuizAttempts(int quizId, int id) {
+        List<FriendQuizAttempt> friendQuizAttempts = new ArrayList<>();
+        Map<Integer, FriendQuizAttempt> friendQuizAttemptMap = new HashMap<>();
+        try {
+            ResultSet resultSet = statement.executeQuery(QueryGenerator.fetchFriendsQuizAttempts(id, quizId));
+            while (resultSet.next()) {
+                int userId = resultSet.getInt("userId");
+                String username = resultSet.getString("username");
+                String email = resultSet.getString("email");
+                int score = resultSet.getInt("score");
+                int timeTaken = resultSet.getInt("time_taken");
+                String attemptTime = Utils.formatTimestamp(resultSet.getTimestamp("attempt_time"));
+                QuizAttempt quizAttempt = new QuizAttempt(userId, quizId, score, timeTaken, attemptTime);
+
+                FriendQuizAttempt friendQuizAttempt = friendQuizAttemptMap.get(userId);
+                if (friendQuizAttempt == null) {
+                    List<QuizAttempt> attempts = new ArrayList<>();
+                    attempts.add(quizAttempt);
+                    friendQuizAttempt = new FriendQuizAttempt(userId, username, email, attempts);
+                    friendQuizAttemptMap.put(userId, friendQuizAttempt);
+                    friendQuizAttempts.add(friendQuizAttempt);
+                } else {
+                    friendQuizAttempt.getQuizAttemptList().add(quizAttempt);
+                }
+            }
+            return friendQuizAttempts;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

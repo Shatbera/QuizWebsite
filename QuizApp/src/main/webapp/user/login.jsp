@@ -20,6 +20,7 @@
             padding: 20px;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
         }
 
         .login-form h2 {
@@ -53,11 +54,21 @@
         .form-group button:hover {
             background-color: #0056b3;
         }
+
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
 <div class="login-form">
     <h2>Login</h2>
+    <%-- Display error message if present --%>
+    <% String message = (String) request.getAttribute("message");
+        if (message != null && !message.isEmpty()) { %>
+    <p class="error-message"><%= message %></p>
+    <% } %>
     <form action="loginServlet" method="post">
         <div class="form-group">
             <label for="username">Username:</label>
