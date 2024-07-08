@@ -166,16 +166,22 @@
         <%
             User user = db.getQuizCreator(quiz.id);
             int currentUserId = (int) session.getAttribute("id");
-            if (user.getId() != currentUserId) {
+            if (user != null && user.getId() != currentUserId) {
         %>
         <a href="../user/userProfile?username=<%= user.getUsername() %>" class="user-item">
             <%
                 }
             %>
+            <%
+                if(user != null){
+            %>
             <div class="user-info">
                 <span class="username"><%= user.getId() == currentUserId ? user.getUsername().concat(" (You)") : user.getUsername() %></span>
                 <span class="email"><%= user.getEmail() %></span>
             </div>
+            <%
+                }
+            %>
         </a>
     </div>
     <%
