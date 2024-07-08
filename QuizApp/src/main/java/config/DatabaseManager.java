@@ -396,8 +396,9 @@ public class DatabaseManager {
         String displayType = quiz.displayType == Quiz.DisplayType.OnePage ? "one_page" : "multiple_page";
         PreparedStatement quizStatement = null;
         PreparedStatement questionStatement = null;
+        int maxScore = quiz.getQuestions().stream().mapToInt(Question::getScore).sum();
         try {
-            quizStatement = connection.prepareStatement(QueryGenerator.createQuiz(quiz.userId, quiz.title, quiz.description, quiz.randomize, displayType, quiz.immediateCorrection), Statement.RETURN_GENERATED_KEYS);
+            quizStatement = connection.prepareStatement(QueryGenerator.createQuiz(quiz.userId, quiz.title, quiz.description, quiz.randomize, displayType, quiz.immediateCorrection, maxScore), Statement.RETURN_GENERATED_KEYS);
             quizStatement.executeUpdate();
             ResultSet quizRs = quizStatement.getGeneratedKeys();
             if (quizRs.next()) {
@@ -508,5 +509,20 @@ public class DatabaseManager {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+    public QuizStatistics getQuizStatistics(int id) {
+        try {
+            ResultSet resultSet = statement.executeQuery(QueryGenerator.getQuizStatistics(id));
+            if(resultSet.next()) {
+                double avgScore = resultSet.getDouble("avg_score");
+                double avgTimeTaken = resultSet.getDouble("avg_time_taken");
+                int totalAttempts = resultSet.getInt("total_attempts");
+                int maxScore = resultSet.getInt("max_score");
+                return new QuizStatistics(totalAttempts, avgScore, maxScore, avgTimeTaken);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
     }
 }

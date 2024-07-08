@@ -4,6 +4,7 @@
 <%@ page import="models.quizzes.QuizAttempt" %>
 <%@ page import="java.util.List" %>
 <%@ page import="models.quizzes.QuizPerformerResponse" %>
+<%@ page import="models.quizzes.QuizStatistics" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -105,7 +106,7 @@
         }
 
         th {
-            background-color: #4CAF50;
+            background-color: #007bff;
             color: white;
         }
 
@@ -139,9 +140,37 @@
         }
 
         .user-table th {
-            background-color: #4CAF50;
+            background-color: #007bff;
             color: white;
             font-weight: bold;
+        }
+
+        .statistics {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            width: 200px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-item h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .stat-item p {
+            font-size: 18px;
+            color: #007bff;
         }
     </style>
     <%
@@ -350,7 +379,43 @@
 
     <div class="section center-text">
         <h2>Quiz Summary Statistics</h2>
-        <!-- Add summary statistics here -->
+        <%
+            QuizStatistics quizStatistics = db.getQuizStatistics(quiz.id);
+            if (quizStatistics != null) {
+        %>
+        <div class="statistics">
+            <div class="stat-item">
+                <h3>Total Attempts</h3>
+                <p><%= quizStatistics.getTotalAttempts() %>
+                </p>
+            </div>
+            <div class="stat-item">
+                <h3>Average Score</h3>
+                <p><%= String.format("%.2f", quizStatistics.getAverageScore()) %>
+                </p>
+            </div>
+            <div class="stat-item">
+                <h3>Max Score</h3>
+                <p><%= quizStatistics.getMaxScore() %>
+                </p>
+            </div>
+            <div class="stat-item">
+                <h3>Average Time Taken (seconds)</h3>
+                <p><%= String.format("%.2f", quizStatistics.getAverageTimeTaken()) %>
+                </p>
+            </div>
+            <div class="stat-item">
+                <h3>Percentage</h3>
+                <p><%= String.format("%.2f", quizStatistics.getPercentage()) %> %</p>
+            </div>
+        </div>
+        <%
+        } else {
+        %>
+        <p>No statistics available.</p>
+        <%
+            }
+        %>
     </div>
 
 

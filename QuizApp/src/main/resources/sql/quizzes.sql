@@ -189,3 +189,5 @@ INSERT INTO matches (question_id, left_match, right_match) VALUES
 (15, 'Fish', 'Vertebrate');
 
 alter table quizzes add column time_created timestamp default current_timestamp;
+
+alter table quizzes add column max_score int not null;

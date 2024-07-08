@@ -135,9 +135,9 @@ public class QueryGenerator {
         return sql;
     }
 
-    public static String createQuiz(int userId, String title, String description, boolean randomize, String displayType, boolean immediateCorrection){
-        return String.format("INSERT INTO quizzes (user_id, title, description, randomize, display_type, immediate_correction) VALUES (%s, %s, %s, %s, %s, %s)",
-                userId, quoted(title), quoted(description), randomize, quoted(displayType), immediateCorrection);
+    public static String createQuiz(int userId, String title, String description, boolean randomize, String displayType, boolean immediateCorrection, int maxScore){
+        return String.format("INSERT INTO quizzes (user_id, title, description, randomize, display_type, immediate_correction, max_score) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+                userId, quoted(title), quoted(description), randomize, quoted(displayType), immediateCorrection, maxScore);
     }
 
     public static String createQuestion(int quizId, String questionType, String questionText){
@@ -208,5 +208,12 @@ public class QueryGenerator {
                              "join users u on qa.user_id = u.id " +
                              "where q.id = %s " +
                              "order by qa.attempt_time desc limit 3", id);
+    }
+
+    public static String getQuizStatistics(int id) {
+        return String.format("select avg(qa.score) as avg_score, avg(qa.time_taken) as avg_time_taken, count(qa.id) as total_attempts, q.max_score as max_score " +
+                             "from quizzes q " +
+                             "join quiz_attempts qa on q.id = qa.quiz_id " +
+                             "where q.id = %s ", id);
     }
 }
