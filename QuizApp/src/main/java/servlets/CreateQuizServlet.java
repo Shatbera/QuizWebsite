@@ -20,9 +20,11 @@ public class CreateQuizServlet extends HttpServlet {
         String title = req.getParameter("title");
         String description = req.getParameter("description");
         boolean randomize = Boolean.parseBoolean(req.getParameter("randomize"));
+        System.out.println("randomize: " + randomize);
         String displayTypeString = req.getParameter("displayType");
         Quiz.DisplayType displayType = displayTypeString.equals("Single-Page") ? Quiz.DisplayType.OnePage : Quiz.DisplayType.MultiplePage;
         boolean immediateCorrection = displayType == Quiz.DisplayType.MultiplePage && Boolean.parseBoolean(req.getParameter("immediateCorrection"));
+        System.out.println("immediateCorrection: " + immediateCorrection);
         Quiz quiz = new Quiz(-1, userId, title, description, randomize, displayType, immediateCorrection);
 
         String[] questionIds = req.getParameterValues("questionId");

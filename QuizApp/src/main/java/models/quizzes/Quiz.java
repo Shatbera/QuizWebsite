@@ -4,6 +4,7 @@ package models.quizzes;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Quiz {
     public enum DisplayType {OnePage, MultiplePage};
@@ -52,6 +53,9 @@ public class Quiz {
     }
 
     public void startQuiz(){
+        if(randomize){
+            Collections.shuffle(questions);
+        }
         quizStartTime = Instant.now();
     }
 

@@ -317,7 +317,7 @@
 
 
         <div class="form-group">
-            <input type="checkbox" id="randomize" name="randomize" value="false">
+            <input type="checkbox" id="randomize" name="randomize" value="true">
             <label for="randomize">Randomize Questions</label>
         </div>
 
@@ -330,7 +330,7 @@
         </div>
 
         <div id="immediateCorrectionDiv" class="form-group" style="display:none;">
-            <input type="checkbox" id="immediateCorrection" name="immediateCorrection" value="false">
+            <input type="checkbox" id="immediateCorrection" name="immediateCorrection" value="true">
             <label for="immediateCorrection">Immediate Correction</label>
         </div>
 
