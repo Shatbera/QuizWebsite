@@ -194,4 +194,19 @@ public class QueryGenerator {
                      "order by score desc, timeTaken " +
                      "limit 3", id, " and date(qa.attempt_time) = current_date()");
     }
+
+
+    public static String fetchRecentQuizPerformers(int id) {
+        return String.format("select u.id          as id, " +
+                             "u.username    as username, " +
+                             "u.email       as email, " +
+                             "qa.time_taken as timeTaken, " +
+                             "qa.score      as score, " +
+                             "qa.attempt_time as attemptTime " +
+                             "from quizzes q " +
+                             "join quiz_attempts qa on q.id = qa.quiz_id " +
+                             "join users u on qa.user_id = u.id " +
+                             "where q.id = %s " +
+                             "order by qa.attempt_time desc limit 3", id);
+    }
 }

@@ -154,10 +154,6 @@
         <h2>Comparison with Your Friends</h2>
     </div>
 
-    <div>
-        <h2>Top Performers on This Quiz</h2>
-    </div>
-
     <a href="../user/homepage.jsp" class="button">Back to Home Page</a>
 
 </div>

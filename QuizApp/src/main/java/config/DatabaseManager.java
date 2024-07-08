@@ -490,4 +490,23 @@ public class DatabaseManager {
             throw new RuntimeException(e);
         }
     }
+
+    public List<QuizPerformerResponse> fetchRecentQuizPerformers(int id) {
+        List<QuizPerformerResponse> performers = new ArrayList<>();
+        try {
+            ResultSet resultSet = statement.executeQuery(QueryGenerator.fetchRecentQuizPerformers(id));
+            while (resultSet.next()) {
+                int userId = resultSet.getInt("id");
+                String username = resultSet.getString("username");
+                String email = resultSet.getString("email");
+                int score = resultSet.getInt("score");
+                int timeTaken = resultSet.getInt("timeTaken");
+                String attemptTime = Utils.formatTimestamp(resultSet.getTimestamp("attemptTime"));
+                performers.add(new QuizPerformerResponse(userId, username, email, score, timeTaken, attemptTime));
+            }
+            return performers;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

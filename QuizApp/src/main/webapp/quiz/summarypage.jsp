@@ -310,7 +310,42 @@
 
     <div class="section center-text">
         <h2>Recent Test Takers' Performance</h2>
-        <!-- Add details about recent test takers' performance here -->
+        <%
+            List<QuizPerformerResponse> recentTaskTakers = db.fetchRecentQuizPerformers(quiz.id);
+            if (recentTaskTakers != null && !recentTaskTakers.isEmpty()) {
+        %>
+        <div class="table-responsive">
+            <table class="user-table">
+                <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Score</th>
+                    <th>Time Taken</th>
+                    <th>Attempt Time</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% for (QuizPerformerResponse performer : recentTaskTakers) { %>
+                <tr>
+                    <td><%= performer.getUsername() %>
+                    </td>
+                    <td><%= performer.getEmail() %>
+                    </td>
+                    <td><%= performer.getScore() %>
+                    </td>
+                    <td><%= performer.getTimeTaken() %>
+                    </td>
+                    <td><%= performer.getAttemptTime() %>
+                    </td>
+                </tr>
+                <% } %>
+                </tbody>
+            </table>
+        </div>
+        <% } else { %>
+        <p>No users found.</p>
+        <% } %>
     </div>
 
     <div class="section center-text">

@@ -6,6 +6,7 @@ public class QuizPerformerResponse {
     private String email;
     private int score;
     private int timeTaken;
+    private String attemptTime;
 
     public QuizPerformerResponse(int userId, String username, String email, int score, int timeTaken) {
         this.userId = userId;
@@ -13,6 +14,15 @@ public class QuizPerformerResponse {
         this.email = email;
         this.score = score;
         this.timeTaken = timeTaken;
+    }
+
+    public QuizPerformerResponse(int userId, String username, String email, int score, int timeTaken, String attemptTime) {
+        this.userId = userId;
+        this.username = username;
+        this.email = email;
+        this.score = score;
+        this.timeTaken = timeTaken;
+        this.attemptTime = attemptTime;
     }
 
     public int getUserId() {
@@ -35,4 +45,7 @@ public class QuizPerformerResponse {
         return timeTaken;
     }
 
+    public String getAttemptTime() {
+        return attemptTime;
+    }
 }
