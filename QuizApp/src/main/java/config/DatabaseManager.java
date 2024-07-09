@@ -552,7 +552,7 @@ public class DatabaseManager {
         }
     }
 
-    public boolean  saveRating(int id, int userId, int rating, String review) {
+    public boolean saveRating(int id, int userId, int rating, String review) {
         try {
             int i = statement.executeUpdate(QueryGenerator.saveRating(id, userId, rating, review));
             return i > 0;
@@ -561,7 +561,19 @@ public class DatabaseManager {
         }
     }
 
-    public ArrayList<QuizReview> getQuizReviews(int quizId){
-        return null;
+    public ArrayList<QuizReview> getQuizReviews(int quizId) {
+        ArrayList<QuizReview> quizReviews = new ArrayList<>();
+        try {
+            ResultSet resultSet = statement.executeQuery(QueryGenerator.fetchReviews(quizId));
+            while (resultSet.next()) {
+                String review = resultSet.getString("review");
+                int stars = resultSet.getInt("stars");
+                String username = resultSet.getString("username");
+                quizReviews.add(new QuizReview(stars, review, username));
+            }
+            return quizReviews;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

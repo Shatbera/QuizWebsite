@@ -239,4 +239,12 @@ public class QueryGenerator {
         return String.format("insert into quiz_ratings (quiz_id, user_id, stars, review) values (%s, %s, %s, %s)",
                 id, userId, rating, quoted(review));
     }
+
+    public static String fetchReviews(int quizId) {
+        return String.format("select qr.review as review, qr.stars as stars, u.username as username " +
+                             "from quiz_ratings qr " +
+                             "         join quizzes q on q.id = qr.quiz_id" +
+                             "         join users u on qr.user_id = u.id " +
+                             "where q.id = %s", quizId);
+    }
 }
