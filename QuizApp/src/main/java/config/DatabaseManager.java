@@ -560,4 +560,8 @@ public class DatabaseManager {
             throw new RuntimeException(e);
         }
     }
+
+    public QuizReview getQuizReviews(int quizId){
+        return null;
+    }
 }
