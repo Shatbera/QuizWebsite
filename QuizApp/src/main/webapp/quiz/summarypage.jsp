@@ -414,6 +414,10 @@
                 <h3>Percentage</h3>
                 <p><%= String.format("%.2f", quizStatistics.getPercentage()) %> %</p>
             </div>
+            <div class="stat-item">
+                <h3>Average Rating</h3>
+                <p><%= String.format("%.2f", quizStatistics.getAverageRating()) %>/5 (Stars)</p>
+            </div>
         </div>
         <%
         } else {

@@ -72,7 +72,7 @@ public class Question {
     }
 
     public String getCorrectAnswer(){
-        return answers.get(0).toString();
+        return answers.stream().filter(a -> a.isCorrect).findFirst().get().toString();
     }
 
     public ArrayList<String> getCorrectAnswers(){

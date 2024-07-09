@@ -109,11 +109,11 @@ public class QueryGenerator {
 
     public static String fetchPastResults(int userId, int quizId, String sortField, String sortDirection) {
         String sql = String.format("select score as score, attempt_time as attemptTime, time_taken as timeTaken " +
-                                      "from (select qa.score, qa.attempt_time, qa.time_taken, row_number() over (order by qa.attempt_time desc) as row_num " +
-                                      "from quiz_attempts qa " +
-                                      "join quizzes q on qa.quiz_id = q.id " +
-                                      "where qa.user_id = %s and qa.quiz_id = %s) as tbl " +
-                                      "where row_num >= 1 ", userId, quizId);
+                                   "from (select qa.score, qa.attempt_time, qa.time_taken, row_number() over (order by qa.attempt_time desc) as row_num " +
+                                   "from quiz_attempts qa " +
+                                   "join quizzes q on qa.quiz_id = q.id " +
+                                   "where qa.user_id = %s and qa.quiz_id = %s) as tbl " +
+                                   "where row_num >= 1 ", userId, quizId);
         if (sortField != null && sortDirection != null) {
             switch (sortField) {
                 case "score":
@@ -135,22 +135,22 @@ public class QueryGenerator {
         return sql;
     }
 
-    public static String createQuiz(int userId, String title, String description, boolean randomize, String displayType, boolean immediateCorrection, int maxScore){
+    public static String createQuiz(int userId, String title, String description, boolean randomize, String displayType, boolean immediateCorrection, int maxScore) {
         return String.format("INSERT INTO quizzes (user_id, title, description, randomize, display_type, immediate_correction, max_score) VALUES (%s, %s, %s, %s, %s, %s, %s)",
                 userId, quoted(title), quoted(description), randomize, quoted(displayType), immediateCorrection, maxScore);
     }
 
-    public static String createQuestion(int quizId, String questionType, String questionText){
+    public static String createQuestion(int quizId, String questionType, String questionText) {
         return String.format("INSERT INTO questions (quiz_id, question_type, question_text) VALUES (%s, %s, %s)",
                 quizId, quoted(questionType), quoted(questionText));
     }
 
-    public static String createAnswer(int questionId, String answer, boolean isCorrect, int answerOrder){
+    public static String createAnswer(int questionId, String answer, boolean isCorrect, int answerOrder) {
         return String.format("INSERT INTO answers (question_id, answer, is_correct, answer_order) VALUES (%s, %s, %s, %s)",
                 questionId, quoted(answer), isCorrect, answerOrder);
     }
 
-    public static String createMatchingAnswer(int questionId, String leftMatch, String rightMatch){
+    public static String createMatchingAnswer(int questionId, String leftMatch, String rightMatch) {
         return String.format("INSERT INTO matches (question_id, left_match, right_match) VALUES (%s, %s, %s)",
                 questionId, quoted(leftMatch), quoted(rightMatch));
     }
@@ -178,21 +178,21 @@ public class QueryGenerator {
 
     public static String fetchQuizPerformers(int id, boolean allTime) {
         return String.format("select ranked.id as id, ranked.username as username, ranked.email as email, ranked.time_taken as timeTaken, ranked.score as score " +
-                     "from (select u.id, " +
-                     "u.username," +
-                     "u.email," +
-                     "qa.time_taken, " +
-                     "qa.score, " +
-                     "row_number() over (partition by u.id order by qa.score desc, qa.time_taken) as rn " +
-                     "from users u " +
-                     "join quiz_attempts qa on u.id = qa.user_id " +
-                     "join quizzes q on qa.quiz_id = q.id " +
-                     "where q.id = %s" +
-                     (!allTime? "%s" : "") +
-                     ") as ranked " +
-                     "where rn = 1 " +
-                     "order by score desc, timeTaken " +
-                     "limit 3", id, " and date(qa.attempt_time) = current_date()");
+                             "from (select u.id, " +
+                             "u.username," +
+                             "u.email," +
+                             "qa.time_taken, " +
+                             "qa.score, " +
+                             "row_number() over (partition by u.id order by qa.score desc, qa.time_taken) as rn " +
+                             "from users u " +
+                             "join quiz_attempts qa on u.id = qa.user_id " +
+                             "join quizzes q on qa.quiz_id = q.id " +
+                             "where q.id = %s" +
+                             (!allTime ? "%s" : "") +
+                             ") as ranked " +
+                             "where rn = 1 " +
+                             "order by score desc, timeTaken " +
+                             "limit 3", id, " and date(qa.attempt_time) = current_date()");
     }
 
 
@@ -211,10 +211,16 @@ public class QueryGenerator {
     }
 
     public static String getQuizStatistics(int id) {
-        return String.format("select avg(qa.score) as avg_score, avg(qa.time_taken) as avg_time_taken, count(qa.id) as total_attempts, q.max_score as max_score " +
+        return String.format("select avg(qa.score)      as avg_score, " +
+                             "       avg(qa.time_taken) as avg_time_taken, " +
+                             "       count(qa.id)       as total_attempts, " +
+                             "       q.max_score        as max_score, " +
+                             "       avg(qr.stars)      as avg_rating " +
                              "from quizzes q " +
-                             "left join quiz_attempts qa on q.id = qa.quiz_id " +
-                             "where q.id = %s ", id);
+                             "         left join quiz_attempts qa " +
+                             "                   on q.id = qa.quiz_id " +
+                             "         left join quiz_ratings qr on qr.quiz_id = q.id " +
+                             "where q.id = %d", id);
     }
 
     public static String fetchFriendsQuizAttempts(int userId, int quizId) {
@@ -225,7 +231,12 @@ public class QueryGenerator {
                              "and qa.user_id in (select innerU.id " +
                              "from users innerU " +
                              "join friends f on ((innerU.id = f.receiver_id and f.sender_id = %s) or " +
-                             "(innerU.id = f.sender_id and f.receiver_id = %s))) " +
+                             "(innerU.id = f.sender_id and f.receiver_id = %s) and f.friendship_type = 'APPROVED')) " +
                              "order by u.id, qa.attempt_time desc", quizId, userId, userId);
+    }
+
+    public static String saveRating(int id, int userId, int rating, String review) {
+        return String.format("insert into quiz_ratings (quiz_id, user_id, stars, review) values (%s, %s, %s, %s)",
+                id, userId, rating, quoted(review));
     }
 }

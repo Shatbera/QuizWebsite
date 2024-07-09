@@ -7,13 +7,15 @@ public class QuizStatistics {
     private int maxScore;
     private double averageTimeTaken;
     private double percentage;
+    private double averageRating;
 
-    public QuizStatistics(int totalAttempts, double averageScore, int maxScore, double averageTimeTaken) {
+    public QuizStatistics(int totalAttempts, double averageScore, int maxScore, double averageTimeTaken, double averageRating) {
         this.totalAttempts = totalAttempts;
         this.averageScore = averageScore;
         this.maxScore = maxScore;
         this.averageTimeTaken = averageTimeTaken;
         this.percentage = averageScore/maxScore * 100;
+        this.averageRating = averageRating;
     }
 
     public int getTotalAttempts() {
@@ -34,5 +36,9 @@ public class QuizStatistics {
 
     public double getPercentage() {
         return percentage;
+    }
+
+    public double getAverageRating() {
+        return averageRating;
     }
 }

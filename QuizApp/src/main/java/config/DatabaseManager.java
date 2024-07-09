@@ -512,7 +512,8 @@ public class DatabaseManager {
                 double avgTimeTaken = resultSet.getDouble("avg_time_taken");
                 int totalAttempts = resultSet.getInt("total_attempts");
                 int maxScore = resultSet.getInt("max_score");
-                return new QuizStatistics(totalAttempts, avgScore, maxScore, avgTimeTaken);
+                double avgRating = resultSet.getDouble("avg_rating");
+                return new QuizStatistics(totalAttempts, avgScore, maxScore, avgTimeTaken, avgRating);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -546,6 +547,15 @@ public class DatabaseManager {
                 }
             }
             return friendQuizAttempts;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean  saveRating(int id, int userId, int rating, String review) {
+        try {
+            int i = statement.executeUpdate(QueryGenerator.saveRating(id, userId, rating, review));
+            return i > 0;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

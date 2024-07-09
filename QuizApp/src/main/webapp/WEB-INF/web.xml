@@ -56,6 +56,10 @@
         <servlet-name>CreateQuizServlet</servlet-name>
         <servlet-class>servlets.CreateQuizServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RateQuizServlet</servlet-name>
+        <servlet-class>servlets.RateQuizServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/user/registerServlet</url-pattern>
@@ -107,5 +111,9 @@
     <servlet-mapping>
         <servlet-name>CreateQuizServlet</servlet-name>
         <url-pattern>/quiz/createQuiz</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RateQuizServlet</servlet-name>
+        <url-pattern>/quiz/rateQuiz</url-pattern>
     </servlet-mapping>
 </web-app>

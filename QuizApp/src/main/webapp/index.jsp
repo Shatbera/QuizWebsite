@@ -47,9 +47,6 @@
     <form action="user/register.jsp" method="GET">
         <button type="submit">Register</button>
     </form>
-    <form action="user/homepage.jsp" method="GET">
-        <button type="submit">Home</button>
-    </form>
 </div>
 </body>
 </html>
