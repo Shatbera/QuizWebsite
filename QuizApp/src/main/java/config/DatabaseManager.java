@@ -561,7 +561,7 @@ public class DatabaseManager {
         }
     }
 
-    public QuizReview getQuizReviews(int quizId){
+    public ArrayList<QuizReview> getQuizReviews(int quizId){
         return null;
     }
 }
