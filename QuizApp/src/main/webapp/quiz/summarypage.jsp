@@ -170,6 +170,37 @@
             font-size: 18px;
             color: #007bff;
         }
+
+        /* Container for the reviews */
+        #quiz-reviews {
+            margin: 20px;
+        }
+
+        /* Individual review container */
+        #quiz-review {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        /* Username styling */
+        #quiz-review h5 {
+            margin: 5px 0;
+        }
+
+        /* Stars container */
+        .stars {
+            color: #ffd700; /* Gold color for stars */
+            font-size: 20px;
+        }
+
+        /* Paragraph for the review text */
+        #quiz-review p {
+            font-size: 14px;
+            line-height: 1.4;
+        }
     </style>
     <%
         DatabaseManager db = (DatabaseManager) application.getAttribute(DatabaseManager.NAME);
@@ -200,7 +231,7 @@
                 }
             %>
             <%
-                if(user != null){
+                if (user != null) {
             %>
             <div class="user-info">
                 <span class="username"><%= user.getId() == currentUserId ? user.getUsername().concat(" (You)") : user.getUsername() %></span>
@@ -434,20 +465,27 @@
         </form>
     </div>
 
-    <div>
+    <div id="quiz-reviews">
         <%
             ArrayList<QuizReview> reviews = db.getQuizReviews(quiz.id);
-            for(QuizReview quizReview : reviews) {
+            for (QuizReview quizReview : reviews) {
         %>
-            <div id="quiz-review">
-                <h5><%=quizReview.userName%></h5>
-                <h5>Stars: <%=quizReview.stars%></h5>
-                <p><%=quizReview.review%></p>
+        <div id="quiz-review">
+            <h5><%=quizReview.userName%>
+            </h5>
+            <div class="stars">
+                <% for (int i = 0; i < quizReview.stars; i++) { %>
+                ★
+                <% } %>
             </div>
+            <p><%=quizReview.review%>
+            </p>
+        </div>
         <%
             }
         %>
     </div>
+
 </div>
 </body>
 </html>
