@@ -1,10 +1,8 @@
 <%@ page import="config.DatabaseManager" %>
-<%@ page import="models.quizzes.Quiz" %>
 <%@ page import="models.user.User" %>
-<%@ page import="models.quizzes.QuizAttempt" %>
 <%@ page import="java.util.List" %>
-<%@ page import="models.quizzes.QuizPerformerResponse" %>
-<%@ page import="models.quizzes.QuizStatistics" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="models.quizzes.*" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -434,6 +432,21 @@
             <input type="hidden" name="quizId" value="<%= quiz.id %>">
             <button type="submit" class="button">Start Quiz</button>
         </form>
+    </div>
+
+    <div>
+        <%
+            ArrayList<QuizReview> reviews = db.getQuizReviews(quiz.id);
+            for(QuizReview quizReview : reviews) {
+        %>
+            <div id="quiz-review">
+                <h5><%=quizReview.userName%></h5>
+                <h5>Stars: <%=quizReview.stars%></h5>
+                <p><%=quizReview.review%></p>
+            </div>
+        <%
+            }
+        %>
     </div>
 </div>
 </body>
